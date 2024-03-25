@@ -9,7 +9,6 @@
 # publishes to real PyPI if:
 # - publish to Test PyPI worked (with all build conditions above)
 # - and if it's a version tag (starting with v*)
-#
 
 name: quantlib-risks wheels
 on: 
