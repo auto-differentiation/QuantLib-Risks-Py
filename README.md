@@ -1,83 +1,49 @@
 
-QuantLib-SWIG: language bindings for QuantLib
-=============================================
+QuantLib-Risks: Risk-enabled QuantLib Python Bindings
+=====================================================
 
-[![Download source](https://img.shields.io/github/v/release/lballabio/QuantLib-SWIG?label=source&sort=semver)](https://github.com/lballabio/QuantLib-SWIG/releases/latest)
-[![PyPI version](https://img.shields.io/pypi/v/quantlib?label=PyPI)](https://pypi.org/project/QuantLib)
-![PRs Welcome](https://img.shields.io/badge/PRs%20-welcome-brightgreen.svg)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1441003.svg)](https://doi.org/10.5281/zenodo.1441003)
-[![Build status](https://github.com/lballabio/QuantLib-SWIG/workflows/Linux%20build/badge.svg?branch=master)](https://github.com/lballabio/QuantLib-SWIG/actions?query=workflow%3A%22Linux+build%22)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lballabio/QuantLib-SWIG/binder?urlpath=lab/tree/Python/examples)
+[![Download source](https://img.shields.io/github/v/release/auto-differentiation/quantlib-risks?label=source&sort=semver)](https://github.com/auto-differentiation/quantlib-risks/releases/latest)
+[![PyPI version](https://img.shields.io/pypi/v/quantlib-risks?label=PyPI)](https://pypi.org/project/quantlib-risks)
 
 ---
 
-QuantLib-SWIG provides the means to use QuantLib from a number of
-languages; currently their list includes Python, C#, Java and R.
+This fork of [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG) builds QuantLib Python bindings with automatic differentiation, enabling
+fast risks calculation with QuantLib in Python.
+It wraps [quantlib-xad](https://github.com/auto-differentiation/quantlib-xad)
+in Python.
 
-The QuantLib project (<https://www.quantlib.org>) is aimed at providing a
-comprehensive software framework for quantitative finance. QuantLib is
-a free/open-source library for modeling, trading, and risk management
-in real-life.
+## Getting Started
 
-QuantLib is Non-Copylefted Free Software and OSI Certified Open Source
-Software.
+You can install it as:
 
+```
+pip install quantlib-risks
+```
 
-Download and usage
-------------------
+## Getting Help
 
-QuantLib-SWIG can be downloaded from <https://www.quantlib.org/download.shtml>.
+For documentation and other resources, see https://auto-differentiation.github.io/quantlib .
 
-On Linux/Unix, you can run:
+If you have found an issue, want to report a bug, or have a feature request, please raise a [GitHub issue](https://github.com/auto-differentiation/XAD/issues).
 
-    ./configure
-    make
-    make check
-    sudo make install
+## Contributing
 
-to build, test and install al modules. If you're only interested in a
-specific language, you can tell make to only work in its subdirectory,
-as in:
+Please read [CONTRIBUTING](CONTRIBUTING.md) for the process of contributing to this project.
+Please also obey our [Code of Conduct](CODE_OF_CONDUCT.md) in all communication.
 
-    make -C Python
+Note that large parts of this repository are left from the fork's origin (e.g. 
+bindings for languages other than Python). They are unused in this fork.
 
-Alternatively, you can cd to a specific subdirectory and follow the
-instructions in its README file. This is also the procedure for
-Windows users.
+## Versioning
 
+This repository follows the QuantLib versions closely. With each new QuantLib release,
+a new release of quantlib-risks is prepared with the same version number.
 
-Questions and feedback
-----------------------
+## License
 
-Bugs can be reported as a GitHub issue at
-<https://github.com/lballabio/QuantLib-SWIG/issues>; if you have a
-patch available, you can open a pull request instead (see
-"Contributing" below).
+This project is licensed under the GNU Affero General Public License - see the [LICENSE.md](LICENSE.md) file for details.
 
-You can also use the `quantlib-users` and `quantlib-dev` mailing lists
-for feedback, questions, etc.  More information and instructions for
-subscribing are at <https://www.quantlib.org/mailinglists.shtml>.
-
-
-Contributing
-------------
-
-The easiest way to contribute is through pull requests on GitHub.  Get
-a GitHub account if you don't have it already and clone the repository
-at <https://github.com/lballabio/QuantLib-SWIG> with the "Fork" button
-in the top right corner of the page. Check out your clone to your
-machine, code away, push your changes to your clone and submit a pull
-request; instructions are available at
-<https://help.github.com/articles/fork-a-repo>.  (In case you need
-them, more detailed instructions for creating pull requests are at
-<https://help.github.com/articles/using-pull-requests>, and a basic
-guide to GitHub is at
-<https://guides.github.com/activities/hello-world/>.
-
-It's likely that we won't merge your code right away, and we'll ask
-for some changes instead. Don't be discouraged! That's normal; the
-library is complex, and thus it might take some time to become
-familiar with it and to use it in an idiomatic way.
-
-We're looking forward to your contributions.
-
+It contains code from [QuantLib](https://www.quantlib.org) 
+and is based on [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG), 
+which are shipped with a different (compatible) license.
+Both licenses are included in [LICENSE.md](LICENSE.md)

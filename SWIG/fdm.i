@@ -98,8 +98,16 @@ class FdmBlackScholesMesher : public Fdm1dMesher {
          Volatility vol);
 };
 
+#ifndef QL_XAD
+
 %template(Concentrating1dMesherPoint) ext::tuple<Real, Real, bool>;
 %template(Concentrating1dMesherPointVector) std::vector<ext::tuple<Real, Real, bool> >;
+
+#else
+
+%include fdm_extra.i
+
+#endif
 
 
 %shared_ptr(Concentrating1dMesher)
@@ -420,8 +428,20 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
     }
 
     void setTime(Time t1, Time t2) {
+      #ifdef QL_XAD
+        PyObject* t1o = make_PyObject(t1);
+        PyObject* t2o = make_PyObject(t2);
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_,"setTime","OO", t1o, t2o);
+        Py_XDECREF(t1o);
+        Py_XDECREF(t2o);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+      #else
         PyObject* pyResult 
             = PyObject_CallMethod(callback_,"setTime","dd", t1, t2);
+      #endif
 
         QL_ENSURE(pyResult != NULL,
                   "failed to call setTime() on Python object");
@@ -454,11 +474,25 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
         PyObject* pyArray = SWIG_NewPointerObj(
             SWIG_as_voidptr(&r), SWIGTYPE_p_Array, 0);
             
+        #ifdef QL_XAD
+        PyObject* so = make_PyObject(s);
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_, "solve_splitting", "kOO", 
+                (unsigned long)(direction), pyArray, so);
+            
+        Py_XDECREF(pyArray); 
+        Py_XDECREF(so);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != nullptr, "Error calling function callback");
+        #else 
         PyObject* pyResult 
             = PyObject_CallMethod(callback_, "solve_splitting", "kOd", 
                 (unsigned long)(direction), pyArray, s);
             
         Py_XDECREF(pyArray); 
+        #endif
             
         return extractArray(pyResult, "solve_splitting");        
     }
@@ -466,12 +500,25 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
     Array preconditioner(const Array& r, Real s) const {
         PyObject* pyArray = SWIG_NewPointerObj(
             SWIG_as_voidptr(&r), SWIGTYPE_p_Array, 0);
+        #ifdef QL_XAD
+        PyObject* so = make_PyObject(s);
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_, "preconditioner", "OO",pyArray, so);
             
+        Py_XDECREF(pyArray); 
+        Py_XDECREF(so);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != nullptr, "Error calling function callback");
+            
+        #else
         PyObject* pyResult 
             = PyObject_CallMethod(callback_, "preconditioner", "Od",pyArray, s);
             
         Py_XDECREF(pyArray); 
             
+        #endif
         return extractArray(pyResult, "preconditioner");        
     }
 
@@ -1145,10 +1192,22 @@ class FdmStepConditionProxy : public StepCondition<Array> {
         PyObject* pyArray = SWIG_NewPointerObj(
             SWIG_as_voidptr(&a), SWIGTYPE_p_Array, 0);
             
+        #ifdef QL_XAD
+        PyObject* to = make_PyObject(t);
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_, "applyTo", "OO",pyArray, to);
+
+        Py_XDECREF(pyArray);
+        Py_XDECREF(to);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        #else
         PyObject* pyResult 
             = PyObject_CallMethod(callback_, "applyTo", "Od",pyArray, t);
 
         Py_XDECREF(pyArray);
+        #endif
     }
     
   private:       
@@ -1255,6 +1314,28 @@ class FdmInnerValueCalculatorProxy : public FdmInnerValueCalculator {
         PyObject* pyIter = SWIG_NewPointerObj(
             SWIG_as_voidptr(&iter), SWIGTYPE_p_FdmLinearOpIterator, 0);
 
+#ifdef QL_XAD
+        PyObject* to = make_PyObject(t);
+
+#if !defined(PY_VERSION_HEX) || PY_VERSION_HEX < 0x03040000         
+        std::vector<char> cstr(
+            methodName.c_str(), methodName.c_str() + methodName.size() + 1);  
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_, &cstr[0], "OO",pyIter, to);
+#else
+        PyObject* pyResult 
+            = PyObject_CallMethod(callback_, methodName.c_str(), "OO", pyIter, to);
+#endif            
+            
+        Py_XDECREF(pyIter);
+        Py_XDECREF(to);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != NULL, "failed to call innerValue function on Python object");
+
+        const Real result = make_Real(pyResult);
+#else
 #if !defined(PY_VERSION_HEX) || PY_VERSION_HEX < 0x03040000         
         std::vector<char> cstr(
             methodName.c_str(), methodName.c_str() + methodName.size() + 1);  
@@ -1270,6 +1351,7 @@ class FdmInnerValueCalculatorProxy : public FdmInnerValueCalculator {
         QL_ENSURE(pyResult != NULL, "failed to call innerValue function on Python object");
 
         const Real result = PyFloat_AsDouble(pyResult);
+#endif
 
         Py_XDECREF(pyResult);
 

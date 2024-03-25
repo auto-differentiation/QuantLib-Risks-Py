@@ -50,18 +50,42 @@ class UnaryFunction {
         Py_XDECREF(function_);
     }
     Real operator()(Real x) const {
+#ifdef QL_XAD
+        PyObject* xo = make_PyObject(x);
+        PyObject* pyResult = PyObject_CallFunctionObjArgs(function_, xo, nullptr);
+        Py_XDECREF(xo);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != NULL, "failed to call Python function");
+        Real result = make_Real(pyResult);
+#else
         PyObject* pyResult = PyObject_CallFunction(function_,"d",x);
         QL_ENSURE(pyResult != NULL, "failed to call Python function");
         Real result = PyFloat_AsDouble(pyResult);
+#endif
         Py_XDECREF(pyResult);
         return result;
     }
     Real derivative(Real x) const {
+#ifdef QL_XAD
+        PyObject* xo = make_PyObject(x);
+        PyObject* pyResult =
+            PyObject_CallMethod(function_,"derivative", "O", xo);
+        Py_XDECREF(xo);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != NULL,
+                  "failed to call derivative() on Python object");
+        Real result = make_Real(pyResult);
+#else
         PyObject* pyResult =
             PyObject_CallMethod(function_,"derivative","d",x);
         QL_ENSURE(pyResult != NULL,
                   "failed to call derivative() on Python object");
         Real result = PyFloat_AsDouble(pyResult);
+#endif
         Py_XDECREF(pyResult);
         return result;
     }
@@ -90,9 +114,21 @@ class BinaryFunction {
         Py_XDECREF(function_);
     }
     Real operator()(Real x, Real y) const {
+#ifdef QL_XAD
+        PyObject *xo = make_PyObject(x), *yo = make_PyObject(y);
+        PyObject* pyResult = PyObject_CallFunctionObjArgs(function_,xo, yo, nullptr);
+        Py_XDECREF(xo);
+        Py_XDECREF(yo);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != NULL, "failed to call Python function");
+        Real result = make_Real(pyResult);
+#else
         PyObject* pyResult = PyObject_CallFunction(function_,"dd",x,y);
         QL_ENSURE(pyResult != NULL, "failed to call Python function");
         Real result = PyFloat_AsDouble(pyResult);
+#endif
         Py_XDECREF(pyResult);
         return result;
     }
@@ -122,12 +158,24 @@ class PyCostFunction : public CostFunction {
     }
     Real value(const Array& x) const {
         PyObject* tuple = PyTuple_New(x.size());
+#ifdef QL_XAD
+        for (Size i=0; i<x.size(); i++)
+            PyTuple_SetItem(tuple,i, make_PyObject(x[i]));
+        PyObject* pyResult = PyObject_CallObject(function_,tuple);
+        Py_XDECREF(tuple);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+        QL_ENSURE(pyResult != NULL, "failed to call Python function");
+        Real result = make_Real(pyResult);
+#else
         for (Size i=0; i<x.size(); i++)
             PyTuple_SetItem(tuple,i,PyFloat_FromDouble(x[i]));
         PyObject* pyResult = PyObject_CallObject(function_,tuple);
         Py_XDECREF(tuple);
         QL_ENSURE(pyResult != NULL, "failed to call Python function");
         Real result = PyFloat_AsDouble(pyResult);
+#endif
         Py_XDECREF(pyResult);
         return result;
     }

@@ -17,9 +17,25 @@
 # # Leverage function for the Heston SLV model
 #
 # Copyright (&copy;) 2019 Klaus Spanderen
+# Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of QuantLib, a free-software/open-source library for financial quantitative analysts and developers - https://www.quantlib.org/
+# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# for risk computation using automatic differentiation. It uses XAD,
+# a fast and comprehensive C++ library for automatic differentiation.
 #
+# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# quantlib-risks is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
 # QuantLib is free software: you can redistribute it and/or modify it under the
 # terms of the QuantLib license.  You should have received a copy of the
 # license along with this program; if not, please email
@@ -40,10 +56,10 @@ if sys.version_info.major < 3:
     sys.exit()
 
 # %%
-import QuantLib as ql
+import quantlib_risks as ql
 from matplotlib import pyplot as plt
 import numpy as np
-import math
+from xad_autodiff import math, value
 
 # %matplotlib inline
 
@@ -91,7 +107,7 @@ leverageFct = ql.HestonSLVMCModel(
 tSteps = 40
 uSteps = 30
 
-tv = np.linspace(0.1, dc.yearFraction(settlementDate, exerciseDate), tSteps)
+tv = np.linspace(0.1, value(dc.yearFraction(settlementDate, exerciseDate)), tSteps)
 
 t = np.empty(tSteps * uSteps)
 s = np.empty(tSteps * uSteps)
@@ -105,7 +121,7 @@ for i in range(0, tSteps):
         idx = i * uSteps + j
         t[idx] = tv[i]
         s[idx] = math.log(sv[j])
-        z[idx] = leverageFct.localVol(t[idx], sv[j])
+        z[idx] = value(leverageFct.localVol(t[idx], sv[j]))
 
 # %%
 fig = plt.figure(figsize=(12,8))

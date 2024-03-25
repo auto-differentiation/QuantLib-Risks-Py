@@ -16,10 +16,25 @@
 # # Swing options
 #
 # Copyright (&copy;) 2018 Klaus Spanderen
+# Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of QuantLib, a free-software/open-source library
-# for financial quantitative analysts and developers - https://www.quantlib.org/
+# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# for risk computation using automatic differentiation. It uses XAD,
+# a fast and comprehensive C++ library for automatic differentiation.
 #
+# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# quantlib-risks is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
 # QuantLib is free software: you can redistribute it and/or modify it under the
 # terms of the QuantLib license.  You should have received a copy of the
 # license along with this program; if not, please email
@@ -30,8 +45,8 @@
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 # FOR A PARTICULAR PURPOSE.  See the license for more details.
 
-import QuantLib as ql
-import math
+import quantlib_risks as ql
+from xad_autodiff import math
 
 todaysDate = ql.Date(30, ql.September, 2018)
 ql.Settings.instance().evaluationDate = todaysDate
@@ -57,7 +72,7 @@ bsProcess = ql.BlackScholesMertonProcess(
 
 swingOption.setPricingEngine(ql.FdSimpleBSSwingEngine(bsProcess))
 
-print("Black Scholes Price: %f" % swingOption.NPV())
+print("Black Scholes Price: {:f}".format(swingOption.NPV()))
 
 x0 = 0.0
 x1 = 0.0
@@ -83,4 +98,4 @@ jProcess = ql.ExtOUWithJumpsProcess(ouProcess, x1, beta, jumpIntensity, eta)
 
 swingOption.setPricingEngine(ql.FdSimpleExtOUJumpSwingEngine(jProcess, riskFreeRate, 25, 25, 200, curveShape))
 
-print("Kluge Model Price  : %f" % swingOption.NPV())
+print("Kluge Model Price  : {:f}".format(swingOption.NPV()))

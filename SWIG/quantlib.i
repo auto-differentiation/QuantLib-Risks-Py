@@ -23,7 +23,7 @@
 #elif defined(SWIGJAVA)
 %module(directors="1") QuantLib
 #else
-%module QuantLib
+%module quantlib_risks
 #endif
 
 %include exception.i

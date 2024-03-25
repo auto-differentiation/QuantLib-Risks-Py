@@ -42,7 +42,13 @@ typedef int Integer;
 typedef long BigInteger;
 typedef unsigned int Natural;
 typedef unsigned long BigNatural;
+#ifdef QL_XAD
+typedef xad::AReal<double> Real;
+#define XAD_ENABLED 1
+#else
 typedef double Real;
+#define XAD_ENABLED 0
+#endif
 
 typedef Real Decimal;
 typedef Real Time;
@@ -63,6 +69,42 @@ typedef Real Probability;
 typedef size_t Size;
 #else
 typedef std::size_t Size;
+#endif
+
+#ifdef QL_XAD
+
+%{
+    #include "converters.hpp"
+%}
+
+%typemap(in) Real, xad::AReal<double> {
+    try {
+        $1 = make_Real($input);
+    } catch(...) {
+        SWIG_exception(SWIG_TypeError, "active Real, float, or long expected");
+    }
+}
+
+%typemap(in) const Real& (Real temp) {
+    try {
+        temp = make_Real($input);
+        $1 = &temp;
+    } catch(...) {
+        SWIG_exception(SWIG_TypeError, "active Real, float, or long expected");
+    }
+
+}
+
+%define QL_TYPECHECK_REALOBJ 4990 %enddef
+
+%typemap(out) Real, xad::AReal<double> {
+    $result = make_PyObject($1);
+}
+
+%typecheck(QL_TYPECHECK_REALOBJ) Real, xad::AReal<double>, const Real&
+{
+    $1 = PyFloat_Check($input) || PyLong_Check($input) || check_Real($input) ? 1 : 0;
+}
 #endif
 
 #endif

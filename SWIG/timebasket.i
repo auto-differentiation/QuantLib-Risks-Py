@@ -54,7 +54,11 @@ class TimeBasket {
                 PyTuple_SetItem(item,0,
                                 SWIG_NewPointerObj((void *) d,
                                                    $descriptor(Date *),1));
+#ifdef QL_XAD
+                PyTuple_SetItem(item,1,make_PyObject(i->second));
+#else
                 PyTuple_SetItem(item,1,PyFloat_FromDouble(i->second));
+#endif
                 PyList_SetItem(itemList,j,item);
             }
             return itemList;

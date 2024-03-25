@@ -110,7 +110,7 @@ class CreditDefaultSwap : public Instrument {
             if (result)
                 return *result;
             else
-                return Null<double>();
+                return Null<Real>();
         }
     }
     bool settlesAccrual() const;

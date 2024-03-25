@@ -89,10 +89,12 @@ Java/QuantLib.jar
 Java/*.jnilib
 Java/org/
 Perl/QuantLib.pm
-Python/QuantLib/QuantLib.py
+Python/quantlib_risks/quantlib_risks.py
 Python/build
 R/R/QuantLib.R
 R/QuantLib.RData
 
 .vscode
 **/venv
+/build
+**/.venv

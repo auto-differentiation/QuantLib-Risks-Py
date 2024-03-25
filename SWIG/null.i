@@ -24,13 +24,14 @@
 
 %{
 using QuantLib::Null;
+using QuantLib::Real;
 typedef int intOrNull;
-typedef double doubleOrNull;
+typedef Real doubleOrNull;
 %}
 
 %inline%{
 int nullInt() { return Null<int>(); }
-double nullDouble() { return Null<double>(); }
+Real nullDouble() { return Null<Real>(); }
 %}
 
 #if defined(SWIGPYTHON)
@@ -57,33 +58,45 @@ double nullDouble() { return Null<double>(); }
 
 %typemap(in) doubleOrNull {
     if ($input == Py_None)
-        $1 = Null<double>();
+        $1 = Null<Real>();
     else if (PyFloat_Check($input))
         $1 = PyFloat_AsDouble($input);
+#ifdef QL_XAD
+    else if (check_Real($input))
+        $1 = make_Real($input);
+#endif
     else
         SWIG_exception(SWIG_TypeError,"double expected");
 }
 %typecheck(SWIG_TYPECHECK_DOUBLE) doubleOrNull {
+#ifdef QL_XAD
+    $1 = ($input == Py_None || PyFloat_Check($input) || check_Real($input)) ? 1 : 0;
+#else
     $1 = ($input == Py_None || PyFloat_Check($input)) ? 1 : 0;
+#endif
 }
 %typemap(out) doubleOrNull {
-    if ($1 == Null<double>()) {
+    if ($1 == Null<Real>()) {
         Py_INCREF(Py_None);
         $result = Py_None;
     } else {
+#ifdef QL_XAD
+        $result = make_PyObject($1);
+#else
         $result = PyFloat_FromDouble($1);
+#endif
     }
 }
 
 #elif defined(SWIGJAVA)
 
 typedef int intOrNull;
-typedef double doubleOrNull;
+typedef Real doubleOrNull;
 
 #elif defined(SWIGCSHARP)
 
 typedef int intOrNull;
-typedef double doubleOrNull;
+typedef Real doubleOrNull;
 
 #elif defined(SWIGR)
 
@@ -117,7 +130,7 @@ typedef double doubleOrNull;
 
 %typemap(in) doubleOrNull {
   $1 = ($1_ltype) REAL($input)[0];
-  if (R_IsNA($1)) $1 = Null<double>();
+  if (R_IsNA($1)) $1 = Null<Real>();
 }
 
 %typemap(rtypecheck) doubleOrNull %{
@@ -126,7 +139,7 @@ typedef double doubleOrNull;
 
 
 %typemap(out) doubleOrNull {
-    if ($1 == Null<double>())
+    if ($1 == Null<Real>())
         $result = Rf_ScalarLogical(NA_LOGICAL);
     else
         $result = Rf_ScalarReal($1);

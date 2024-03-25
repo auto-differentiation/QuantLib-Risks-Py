@@ -1,8 +1,23 @@
 """
  Copyright (C) 2021 Klaus Spanderen
+ Copyright (C) 2024 Xcelerit Computing Limited.
 
- This file is part of QuantLib, a free-software/open-source library
- for financial quantitative analysts and developers - http://quantlib.org/
+ This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+ for risk computation using automatic differentiation. It uses XAD,
+ a fast and comprehensive C++ library for automatic differentiation.
+
+ quantlib-risks and XAD are free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published
+ by the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ quantlib-risks is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  QuantLib is free software: you can redistribute it and/or modify it
  under the terms of the QuantLib license.  You should have received a
@@ -17,7 +32,7 @@
 
 import unittest
 
-import QuantLib as ql
+import quantlib_risks as ql
 
 class OptionsTest(unittest.TestCase):
 
@@ -26,6 +41,7 @@ class OptionsTest(unittest.TestCase):
 
         dc = ql.Actual365Fixed()
         todays_date = ql.Date(19, ql.May, 2021)
+        ql.Settings.instance().evaluationDate = todays_date
 
         r = ql.YieldTermStructureHandle(ql.FlatForward(todays_date, 0.075, dc))
         d = ql.YieldTermStructureHandle(ql.FlatForward(todays_date, 0.01, dc))
@@ -59,10 +75,14 @@ class OptionsTest(unittest.TestCase):
         )
 
         self.assertAlmostEqual(0.87628, option.NPV(), 4)
+        
+    def tearDown(self) -> None:
+        ql.Settings.instance().evaluationDate = ql.Date()
 
     def testAnalyticHestonHullWhite(self):
         """ Testing Analytic Heston Hull-White pricing """
         today = ql.Date.todaysDate()
+        ql.Settings.instance().evaluationDate = today
         dc = ql.Actual365Fixed()
 
         maturityDate = today + ql.Period(10 * 365, ql.Days)

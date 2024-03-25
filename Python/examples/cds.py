@@ -16,10 +16,25 @@
 # # Credit default swaps
 #
 # Copyright (&copy;) 2014 Thema Consulting SA
+# Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of QuantLib, a free-software/open-source library
-# for financial quantitative analysts and developers - https://www.quantlib.org/
+# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# for risk computation using automatic differentiation. It uses XAD,
+# a fast and comprehensive C++ library for automatic differentiation.
 #
+# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# quantlib-risks is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
 # QuantLib is free software: you can redistribute it and/or modify it under the
 # terms of the QuantLib license.  You should have received a copy of the
 # license along with this program; if not, please email
@@ -32,7 +47,7 @@
 
 # ### Setup
 
-import QuantLib as ql
+import quantlib_risks as ql
 
 calendar = ql.TARGET()
 
@@ -67,16 +82,16 @@ instruments = [
 hazard_curve = ql.PiecewiseFlatHazardRate(todaysDate, instruments, ql.Actual365Fixed())
 print("Calibrated hazard rate values: ")
 for x in hazard_curve.nodes():
-    print("hazard rate on %s is %.7f" % x)
+    print("hazard rate on {} is {:.7f}".format(*x))
 
 print("Some survival probability values: ")
 print(
-    "1Y survival probability: %.4g, \n\t\texpected %.4g"
-    % (hazard_curve.survivalProbability(todaysDate + ql.Period("1Y")), 0.9704)
+    "1Y survival probability: {:.4g}, \n\t\texpected {:.4g}".format(
+    hazard_curve.survivalProbability(todaysDate + ql.Period("1Y")), 0.9704)
 )
 print(
-    "2Y survival probability: %.4g, \n\t\texpected %.4g"
-    % (hazard_curve.survivalProbability(todaysDate + ql.Period("2Y")), 0.9418)
+    "2Y survival probability: {:.4g}, \n\t\texpected {:.4g}".format(
+    hazard_curve.survivalProbability(todaysDate + ql.Period("2Y")), 0.9418)
 )
 
 # ### Reprice instruments
@@ -105,8 +120,8 @@ for maturity, s in zip(maturities, quoted_spreads):
 
 print("Repricing of quoted CDSs employed for calibration: ")
 for cds, tenor in zip(all_cds, tenors):
-    print("%s fair spread: %.7g" % (tenor, cds.fairSpread()))
-    print("   NPV: %g" % cds.NPV())
-    print("   default leg: %.7g" % cds.defaultLegNPV())
-    print("   coupon leg: %.7g" % cds.couponLegNPV())
+    print("{} fair spread: {:.7g}".format(tenor, cds.fairSpread()))
+    print("   NPV: {:g}".format(cds.NPV()))
+    print("   default leg: {:.7g}".format(cds.defaultLegNPV()))
+    print("   coupon leg: {:.7g}".format(cds.couponLegNPV()))
     print("")
