@@ -1,0 +1,93 @@
+##############################################################################
+#   Pypproject main file for quantlib-risks
+#
+#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  for risk computation using automatic differentiation. It uses XAD,
+#  a fast and comprehensive C++ library for automatic differentiation.
+#
+#  Copyright (C) 2010-2024 Xcelerit Computing Ltd.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as published
+#  by the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   
+##############################################################################
+
+[tool.poetry]
+name = "quantlib-risks"
+version = "@PACKAGE_VERSION@"
+description = "Fast risks calculations in QuantLib"
+authors = [
+    "Auto Differentiation Dev Team <dev@auto-differentiation.com>",
+    "QuantLib Team <quantlib-users@lists.sourceforge.net>"
+]
+readme = "README.md"
+homepage = "https://auto-differentiation.github.io"
+repository = "https://github.com/auto-differentiation/XAD"
+documentation = "https://auto-differentiation.github.io/quantlib"
+keywords = [
+    "automatic-differentiation",
+    "derivatives",
+    "risk-management",
+    "quant-finance",
+    "greeks",
+    "risks"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "License :: Other/Proprietary License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development"
+]
+license = "AGPL-3.0-or-later"
+exclude = [
+    "quantlib_risks/CMakeFiles",
+    "quantlib_risks/*.cmake",
+    "quantlib_risks/*.cxx",
+]
+
+[tool.poetry.urls]
+download = "https://pypi.org/project/quantlib-risks/#files"
+tracker = "https://github.com/auto-differentiation/XAD/issues"
+
+[tool.poetry.build]
+script = "build_extensions.py"
+generate-setup-file = false
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+xad-autodiff = "*"
+
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0", 
+    "setuptools>=42"
+]
+build-backend = "poetry.core.masonry.api"
+

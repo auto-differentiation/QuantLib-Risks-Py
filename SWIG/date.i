@@ -922,4 +922,8 @@ struct ASX {
                                 const Date& referenceDate = Date());
 };
 
+#ifdef QL_XAD
+%include date_extra.i
+#endif
+
 #endif

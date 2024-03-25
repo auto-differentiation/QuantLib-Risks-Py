@@ -45,14 +45,14 @@ using QuantLib::PiecewiseYieldCurve;
 
 %{
 struct _IterativeBootstrap {
-    double accuracy, minValue, maxValue;
+    Real accuracy, minValue, maxValue;
     Size maxAttempts;
     Real maxFactor, minFactor;
     bool dontThrow;
     Size dontThrowSteps, maxEvaluations;
-    _IterativeBootstrap(double accuracy = Null<double>(),
-                        double minValue = Null<double>(),
-                        double maxValue = Null<double>(),
+    _IterativeBootstrap(Real accuracy = Null<Real>(),
+                        Real minValue = Null<Real>(),
+                        Real maxValue = Null<Real>(),
                         Size maxAttempts = 1,
                         Real maxFactor = 2.0,
                         Real minFactor = 2.0,
@@ -81,9 +81,9 @@ struct _IterativeBootstrap {
     #if !defined(SWIGJAVA) && !defined(SWIGCSHARP)
     %feature("kwargs") _IterativeBootstrap;
     #endif
-    _IterativeBootstrap(doubleOrNull accuracy = Null<double>(),
-                        doubleOrNull minValue = Null<double>(),
-                        doubleOrNull maxValue = Null<double>(),
+    _IterativeBootstrap(doubleOrNull accuracy = Null<Real>(),
+                        doubleOrNull minValue = Null<Real>(),
+                        doubleOrNull maxValue = Null<Real>(),
                         Size maxAttempts = 1,
                         Real maxFactor = 2.0,
                         Real minFactor = 2.0,
@@ -206,22 +206,22 @@ class AdditionalDates {
 struct _GlobalBootstrap {
     std::vector<ext::shared_ptr<RateHelper> > additionalHelpers;
     std::vector<Date> additionalDates;
-    double accuracy;
-    _GlobalBootstrap(double accuracy = Null<double>())
+    Real accuracy;
+    _GlobalBootstrap(Real accuracy = Null<Real>())
     : accuracy(accuracy) {}
    _GlobalBootstrap(const std::vector<ext::shared_ptr<RateHelper> >& additionalHelpers,
                      const std::vector<Date>& additionalDates,
-                     double accuracy = Null<double>())
+                     Real accuracy = Null<Real>())
     : additionalHelpers(additionalHelpers), additionalDates(additionalDates), accuracy(accuracy) {}
 };
 %}
 
 %rename(GlobalBootstrap) _GlobalBootstrap;
 struct _GlobalBootstrap {
-    _GlobalBootstrap(doubleOrNull accuracy = Null<double>());
+    _GlobalBootstrap(doubleOrNull accuracy = Null<Real>());
     _GlobalBootstrap(const std::vector<ext::shared_ptr<RateHelper> >& additionalHelpers,
                      const std::vector<Date>& additionalDates,
-                     doubleOrNull accuracy = Null<double>());
+                     doubleOrNull accuracy = Null<Real>());
 };
 
 

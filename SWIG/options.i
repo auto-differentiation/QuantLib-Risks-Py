@@ -428,7 +428,7 @@ class AnalyticHestonEngine : public PricingEngine {
                          Real andersenPiterbargEpsilon = 1e-8);
 
     Size numberOfEvaluations() const;
-#if defined(SWIGCSHARP) || defined(SWIGPYTHON)
+#if (defined(SWIGCSHARP) || defined(SWIGPYTHON)) && !defined(QL_XAD)
     std::complex<Real> chF(const std::complex<Real>& z, Time t) const;
     std::complex<Real> lnChF(const std::complex<Real>& z, Time t) const;
 #else

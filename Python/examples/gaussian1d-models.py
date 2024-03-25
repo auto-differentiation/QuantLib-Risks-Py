@@ -17,10 +17,25 @@
 # # Gaussian 1D models
 #
 # Copyright (&copy;) 2018 Angus Lee
+# Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of QuantLib, a free-software/open-source library
-# for financial quantitative analysts and developers - https://www.quantlib.org/
+# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# for risk computation using automatic differentiation. It uses XAD,
+# a fast and comprehensive C++ library for automatic differentiation.
 #
+# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# quantlib-risks is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
 # QuantLib is free software: you can redistribute it and/or modify it under the
 # terms of the QuantLib license.  You should have received a copy of the
 # license along with this program; if not, please email
@@ -35,7 +50,7 @@
 # ### Setup
 
 # %%
-import QuantLib as ql
+import quantlib_risks as ql
 import pandas as pd
 
 # %%
@@ -393,9 +408,9 @@ swapPricer = ql.DiscountingSwapEngine(t0_Ois)
 underlying4.setPricingEngine(swapPricer)
 
 # %%
-print("Underlying CMS Swap NPV = %f" % underlying4.NPV())
-print("Underlying CMS Leg  NPV = %f" % underlying4.legNPV(0))
-print("Underlying Euribor  NPV = %f" % underlying4.legNPV(1))
+print(f"Underlying CMS Swap NPV = {underlying4.NPV()}")
+print(f"Underlying CMS Leg  NPV = {underlying4.legNPV(0)}")
+print(f"Underlying Euribor  NPV = {underlying4.legNPV(1)}")
 
 # %% [markdown]
 # We generate a naive calibration basket and calibrate the GSR model to it:

@@ -85,6 +85,25 @@ class OdeFct {
     
     const std::vector<Real> operator()(Real x, const std::vector<Real>& y) const {
         PyObject* pyY = PyList_New(y.size());
+#ifdef QL_XAD
+        for (Size i=0; i < y.size(); ++i)
+            PyList_SetItem(pyY, i, make_PyObject(y[i]));
+        
+        PyObject* xo = make_PyObject(x);
+        PyObject* pyResult = PyObject_CallFunctionObjArgs(function_, xo, pyY, nullptr);
+        Py_XDECREF(pyY);
+        Py_XDECREF(xo);
+        if (PyErr_Occurred()) {
+          PyErr_Print();
+        }
+
+        QL_ENSURE(pyResult != NULL && PyList_Check(pyResult), 
+            "failed to call Python function");
+       
+           std::vector<Real> retVal(y.size());
+           for (Size i=0; i < y.size(); ++i)
+               retVal[i] = make_Real(PyList_GET_ITEM(pyResult, i));
+#else
         for (Size i=0; i < y.size(); ++i)
             PyList_SetItem(pyY, i, PyFloat_FromDouble(y[i]));
         
@@ -99,6 +118,7 @@ class OdeFct {
            for (Size i=0; i < y.size(); ++i)
                retVal[i] = PyFloat_AsDouble(PyList_GET_ITEM(pyResult, i));
                           
+#endif                          
         Py_XDECREF(pyResult);
         
         return retVal;

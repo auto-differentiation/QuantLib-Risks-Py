@@ -26,7 +26,7 @@
 %include date.i
 
 #if defined(SWIGCSHARP)
-SWIG_STD_VECTOR_ENHANCED( std::pair<Date,double> )
+SWIG_STD_VECTOR_ENHANCED( std::pair<Date,Real> )
 #endif
 
 %{
@@ -42,19 +42,23 @@ namespace std {
 
     %template(IntVector) vector<int>;
     %template(UnsignedIntVector) vector<unsigned int>;
+#ifndef QL_XAD
     %template(DoubleVector) vector<double>;
+#endif
     %template(StrVector) vector<std::string>;
     %template(BoolVector) vector<bool>;
 
+#ifndef QL_XAD
     %template(DoubleVectorVector) vector<vector<double>>;
 
-    %template(DoublePair) pair<double,double>;
+     template(DoublePair) pair<double,double>;
     %template(DoublePairVector) vector<pair<double,double>>;
     %template(PairDoubleVector) pair<vector<double>,vector<double>>;
+#endif
     %template(UnsignedIntPair) pair<unsigned int,unsigned int>;
     %template(UnsignedIntPairVector) vector<pair<unsigned int,unsigned int>>;
 
-#if !defined(SWIGR)
+#if !defined(SWIGR) && !defined(QL_XAD)
     %template(NodePair) pair<Date,double>;
     %template(NodeVector) vector<pair<Date,double> >;
 #endif
@@ -73,5 +77,9 @@ namespace std {
     character)
 #endif
 }
+
+#ifdef QL_XAD
+%include vectors_extra.i
+#endif
 
 #endif

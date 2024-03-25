@@ -50,6 +50,11 @@ bool ArrayFromSequence(PyObject* source, Array* target) {
             } else if (PyInt_Check(o)) {
                 (*target)[i] = Real(PyInt_AsLong(o));
                 Py_DECREF(o);
+#ifdef QL_XAD
+            } else if (check_Real(o)) {
+                (*target)[i] = make_Real(o);
+                Py_DECREF(o);
+#endif
             } else {
                 Py_DECREF(o);
                 return false;
@@ -99,7 +104,11 @@ bool ArrayFromSequence(PyObject* source, Array* target) {
             $1 = 1;
         } else {
             PyObject* o = PySequence_GetItem($input,0);
+#ifdef QL_XAD
+            if (PyNumber_Check(o) || check_Real(o))
+#else
             if (PyNumber_Check(o))
+#endif
                 $1 = 1;
             else
                 $1 = 0;
@@ -120,7 +129,11 @@ bool ArrayFromSequence(PyObject* source, Array* target) {
             $1 = 1;
         } else {
             PyObject* o = PySequence_GetItem($input,0);
+#ifdef QL_XAD
+            if (PyNumber_Check(o) || check_Real(o))
+#else
             if (PyNumber_Check(o))
+#endif
                 $1 = 1;
             else
                 $1 = 0;
@@ -179,6 +192,11 @@ bool ArrayFromSequence(PyObject* source, Array* target) {
                     } else if (PyInt_Check(d)) {
                         $1[i][j] = Real(PyInt_AsLong(d));
                         Py_DECREF(d);
+#ifdef QL_XAD
+                    } else if (check_Real(d)) {
+                        $1[i][j] = make_Real(d);
+                        Py_DECREF(d);
+#endif
                     } else {
                         PyErr_SetString(PyExc_TypeError,"doubles expected");
                         Py_DECREF(d);
@@ -250,6 +268,11 @@ bool ArrayFromSequence(PyObject* source, Array* target) {
                     } else if (PyInt_Check(d)) {
                         temp[i][j] = Real(PyInt_AsLong(d));
                         Py_DECREF(d);
+#ifdef QL_XAD
+                    } else if (check_Real(d)) {
+                        temp[i][j] = make_Real(d);
+                        Py_DECREF(d);
+#endif
                     } else {
                         PyErr_SetString(PyExc_TypeError,"doubles expected");
                         Py_DECREF(d);
