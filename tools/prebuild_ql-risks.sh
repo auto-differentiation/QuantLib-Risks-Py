@@ -3,7 +3,7 @@
 ##############################################################################
 #   
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -80,7 +80,7 @@ case "$(uname -sr)" in
      ;;
 esac
 
-if [ "$machine" == "linux" ] ; then
+if [ "$machine" == "linu" ] ; then
     # Linux builds in a container, so we need to install boost there
     curl -O -L https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.gz
     tar xfz boost_*.tar.gz

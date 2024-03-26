@@ -1,8 +1,8 @@
 /******************************************************************************
  *   Extra type converters for vectors of tuples of Real, Real, bool - required
- *   for quantlib-risks.
+ *   for QuantLib-Risks.
  *
- *  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+ *  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
  *  for risk computation using automatic differentiation. It uses XAD,
  *  a fast and comprehensive C++ library for automatic differentiation.
  *

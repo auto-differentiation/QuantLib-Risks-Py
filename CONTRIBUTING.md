@@ -7,12 +7,12 @@ Note that this fork is importing all changes from the QuantLib-SWIG repository o
 release. Changes related to QuantLib's own Python bindings will be included in each new
 release. 
 Contributions to this repository should only be made if they are related to building
-the Python bindings for quantlib-risks (enabled with XAD).
+the Python bindings for QuantLib-Risks (enabled with XAD).
 
 1.  Fork, then clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/quantlib-risks.git
+git clone https://github.com/yourusername/QuantLib-Risks.git
 ```
 
 2.  Follow the [Build Instructions](README.md) to setup the dependencies and 
@@ -49,6 +49,6 @@ accepted:
     followed by a more detailed explanation)
 
 
-[pr]: https://github.com/auto-differentiation/quantlib-risks/compare/
+[pr]: https://github.com/auto-differentiation/QuantLib-Risks/compare/
 
 [cla]: https://gist.github.com/auto-differentiation-dev/5c6121c3f341e2de710fa034e9ff3263

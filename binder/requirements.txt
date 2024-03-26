@@ -1,5 +1,5 @@
 # Requirements for the example Python notebooks. Used by mybinder.org.
-quantlib-risks
+QuantLib-Risks
 QuantLib
 jupyter
 jupytext

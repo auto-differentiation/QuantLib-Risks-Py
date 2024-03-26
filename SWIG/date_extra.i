@@ -1,9 +1,9 @@
 /******************************************************************************
- *   Extra type converters for Dates that are needed with quantlib-risks in order
+ *   Extra type converters for Dates that are needed with QuantLib-Risks in order
  *   to cover pair<Date, Real> and vectors thereof. The functions are declared in
  *   converters.hpp
  *
- *  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+ *  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
  *  for risk computation using automatic differentiation. It uses XAD,
  *  a fast and comprehensive C++ library for automatic differentiation.
  *

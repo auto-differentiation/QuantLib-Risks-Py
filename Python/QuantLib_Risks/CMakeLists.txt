@@ -1,7 +1,7 @@
 ##############################################################################
 #  Build SWIG binary module and optionally wheel package.
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -25,19 +25,19 @@
 set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY USE_SWIG_DEPENDENCIES TRUE)
 set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY COMPILE_OPTIONS -DQL_XAD=1)
-swig_add_library(quantlib_risks
+swig_add_library(QuantLib_Risks
                  LANGUAGE python
                  OUTPUT_DIR .
                  SOURCES ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i converters.cpp
 )
-target_link_libraries(quantlib_risks PRIVATE Python3::Module QuantLib::QuantLib pybind11::headers)
-target_compile_features(quantlib_risks PRIVATE c_std_17)
-target_compile_definitions(quantlib_risks PRIVATE QL_XAD=1)
-target_include_directories(quantlib_risks PRIVATE .)
-set_property(TARGET quantlib_risks PROPERTY SUFFIX "${QL_MODULE_SUFFIX}")
+target_link_libraries(QuantLib_Risks PRIVATE Python3::Module QuantLib::QuantLib pybind11::headers)
+target_compile_features(QuantLib_Risks PRIVATE c_std_17)
+target_compile_definitions(QuantLib_Risks PRIVATE QL_XAD=1)
+target_include_directories(QuantLib_Risks PRIVATE .)
+set_property(TARGET QuantLib_Risks PROPERTY SUFFIX "${QL_MODULE_SUFFIX}")
 if(MSVC)
     # we build with the static runtime in Windows
-    set_target_properties(quantlib_risks PROPERTIES 
+    set_target_properties(QuantLib_Risks PROPERTIES 
             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
@@ -52,7 +52,7 @@ endif()
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/../wheel.stamp
-    DEPENDS quantlib_risks
+    DEPENDS QuantLib_Risks
             ${CMAKE_CURRENT_BINARY_DIR}/../pyproject.toml
             ${CMAKE_CURRENT_BINARY_DIR}/../build_extensions.py
             ${CMAKE_CURRENT_BINARY_DIR}/../README.md
@@ -64,7 +64,7 @@ add_custom_command(
     # build the wheel
     COMMAND ${VENV_PYTHON} -m pip wheel .
     # install the wheel in the venv
-    COMMAND ${VENV_PYTHON} -m pip install quantlib_risks*.whl --force-reinstall
+    COMMAND ${VENV_PYTHON} -m pip install QuantLib_Risks*.whl --force-reinstall
     # install other dependencies for running the examples / tests
     COMMAND ${VENV_PYTHON} -m pip install -r ${PROJECT_SOURCE_DIR}/binder/requirements.txt
     # update the stamp file, to keep track of when we last build it

@@ -19,16 +19,16 @@
 # Copyright (&copy;) 2004, 2005, 2006, 2007 StatPro Italia srl<br>
 # Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 # for risk computation using automatic differentiation. It uses XAD,
 # a fast and comprehensive C++ library for automatic differentiation.
 #
-# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# QuantLib-Risks and XAD are free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# quantlib-risks is distributed in the hope that it will be useful,
+# QuantLib-Risks is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
@@ -47,7 +47,7 @@
 # FOR A PARTICULAR PURPOSE.  See the license for more details.
 
 # %%
-import quantlib_risks as ql
+import QuantLib_Risks as ql
 from xad_autodiff.adj_1st import Tape
 
 # %% [markdown]
@@ -352,14 +352,17 @@ print("---------------- deposit/futures/swap curve, 5-years spot swap")
 forecastTermStructure.linkTo(depoFuturesSwapCurve)
 show(spot)
 
+# %%
 print("\n---------------- deposit/FRA/swap curve, 5-years spot swap")
 forecastTermStructure.linkTo(depoFraSwapCurve)
 show(spot)
 
+# %%
 print("\n---------------- deposit/futures/swap curve, 1-year forward swap")
 forecastTermStructure.linkTo(depoFuturesSwapCurve)
 show(forward)
 
+# %%
 print("\n---------------- deposit/FRA/swap curve, 1-year forward swap")
 forecastTermStructure.linkTo(depoFraSwapCurve)
 show(forward)

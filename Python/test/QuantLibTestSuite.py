@@ -3,16 +3,16 @@
  Copyright (C) 2009 Joseph Malicki
  Copyright (C) 2024 Xcelerit Computing Limited.
 
- This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+ This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
  for risk computation using automatic differentiation. It uses XAD,
  a fast and comprehensive C++ library for automatic differentiation.
 
- quantlib-risks and XAD are free software: you can redistribute it and/or modify
+ QuantLib-Risks and XAD are free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published
  by the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- quantlib-risks is distributed in the hope that it will be useful,
+ QuantLib-Risks is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Affero General Public License for more details.
@@ -35,11 +35,11 @@ import os
 import sys
 import unittest
 
-import quantlib_risks as ql
+import QuantLib_Risks as ql
 
 
 def test():
-    print('testing quantlib_risks', ql.__version__)
+    print('testing QuantLib_Risks', ql.__version__)
     sys.argv[1:1] = ['discover', '-s', os.path.dirname(__file__)]
     unittest.main(module=None, verbosity=2)
 

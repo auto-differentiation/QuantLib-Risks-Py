@@ -1,8 +1,8 @@
 ##############################################################################
-#   CMake file for quantlib-risks. The version set here is used for the Python
+#   CMake file for QuantLib-Risks. The version set here is used for the Python
 #   package.
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -24,11 +24,11 @@
 ##############################################################################
 
 cmake_minimum_required(VERSION 3.15.0)
-project(quantlib_risks LANGUAGES CXX VERSION 1.33)
+project(QuantLib_Risks LANGUAGES CXX VERSION 1.33)
 
 # For MSVC RUNTIME LIBRARY, need CMP0091=NEW and cmake 3.15+
 cmake_policy(SET CMP0091 NEW)
-set(PACKAGE_VERSION       "${PROJECT_VERSION}")
+set(PACKAGE_VERSION       "${PROJECT_VERSION}-post1")
 
 find_package(QuantLibXad REQUIRED)
 find_package(SWIG REQUIRED)

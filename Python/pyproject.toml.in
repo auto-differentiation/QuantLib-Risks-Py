@@ -1,7 +1,7 @@
 ##############################################################################
-#   Pypproject main file for quantlib-risks
+#   Pypproject main file for QuantLib-Risks
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -23,7 +23,7 @@
 ##############################################################################
 
 [tool.poetry]
-name = "quantlib-risks"
+name = "QuantLib-Risks"
 version = "@PACKAGE_VERSION@"
 description = "Fast risks calculations in QuantLib"
 authors = [
@@ -65,14 +65,17 @@ classifiers = [
     "Topic :: Software Development"
 ]
 license = "AGPL-3.0-or-later"
+packages = [
+    { include = "QuantLib_Risks" }
+]
 exclude = [
-    "quantlib_risks/CMakeFiles",
-    "quantlib_risks/*.cmake",
-    "quantlib_risks/*.cxx",
+    "QuantLib_Risks/CMakeFiles",
+    "QuantLib_Risks/*.cmake",
+    "QuantLib_Risks/*.cxx",
 ]
 
 [tool.poetry.urls]
-download = "https://pypi.org/project/quantlib-risks/#files"
+download = "https://pypi.org/project/QuantLib-Risks/#files"
 tracker = "https://github.com/auto-differentiation/XAD/issues"
 
 [tool.poetry.build]
