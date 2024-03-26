@@ -3,14 +3,14 @@
 # - OR pushes of tags starting with v*
 # - OR manual dispatch on repo
 # publishes to test pypi if:
-# - in auto-differentiation/quantlib-risks repository
+# - in auto-differentiation/QuantLib-Risks repository
 # - AND pushes of tags starting with v*
 # - OR manual dispatch on repo
 # publishes to real PyPI if:
 # - publish to Test PyPI worked (with all build conditions above)
 # - and if it's a version tag (starting with v*)
 
-name: quantlib-risks wheels
+name: QuantLib-Risks wheels
 on: 
   pull_request:
     branches:
@@ -128,11 +128,11 @@ jobs:
     needs: build_wheels
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.repository == 'auto-differentiation/quantlib-risks' &&
+      (github.repository == 'auto-differentiation/QuantLib-Risks' &&
       (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')))
     environment: 
       name: testpypi
-      url: https://test.pypi.org/p/quantlib-risks
+      url: https://test.pypi.org/p/QuantLib-Risks
     permissions:
       id-token: write
     runs-on: ubuntu-latest
@@ -154,7 +154,7 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     environment:
       name: pypi
-      url: https://pypi.org/p/quantlib-risks
+      url: https://pypi.org/p/QuantLib-Risks
     permissions:
       id-token: write
     steps:

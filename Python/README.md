@@ -9,13 +9,13 @@ Useful links:
 ## Installation
 
 ```
-pip install quantlib-risks
+pip install QuantLib-Risks
 ```
 
 ## Usage Illustration
 
 ```python
-import quantlib_risks as ql
+import QuantLib_Risks as ql
 from xad_autodiff.adj_1st import Tape
 
 with Tape() as t:

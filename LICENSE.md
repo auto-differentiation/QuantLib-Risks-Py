@@ -1,6 +1,6 @@
 # License Terms
 
-quantlib-risks is published under the AGPL, version 3, with the terms
+QuantLib-Risks is published under the AGPL, version 3, with the terms
 [given below](#gnu-affero-general-public-license). 
 
 It contains code from [QuantLib](https://www.quantlib.org) 

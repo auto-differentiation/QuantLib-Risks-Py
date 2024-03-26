@@ -1,7 +1,7 @@
 ##############################################################################
 #  Main CMake file for the Python extension.
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -53,5 +53,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/README.md
                ${CMAKE_CURRENT_BINARY_DIR}/README.md COPYONLY)
 
 
-add_subdirectory(quantlib_risks)
+add_subdirectory(QuantLib_Risks)
 

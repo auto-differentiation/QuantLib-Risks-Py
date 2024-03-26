@@ -18,7 +18,7 @@
 #
 # This sample prices a forward-starting interest rate swap on a curve that
 # has been bootrapped on a large number of market quotes. 
-# It calculates all sensitivities using quantlib-risks and measures the performance
+# It calculates all sensitivities using QuantLib-Risks and measures the performance
 # (averaged over a number of repetitions).
 #
 # Pricing using standard QuantLib can also be done by simply changing the import
@@ -31,16 +31,16 @@
 # Copyright (&copy;) 2018 Jose Garcia<br>
 # Copyright (&copy;) 2024 Xcelerit Computing Limited.
 #
-# This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+# This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 # for risk computation using automatic differentiation. It uses XAD,
 # a fast and comprehensive C++ library for automatic differentiation.
 #
-# quantlib-risks and XAD are free software: you can redistribute it and/or modify
+# QuantLib-Risks and XAD are free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# quantlib-risks is distributed in the hope that it will be useful,
+# QuantLib-Risks is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
@@ -60,7 +60,7 @@
 
 # %%
 
-import quantlib_risks as ql  # enable this to calculate sensitivities
+import QuantLib_Risks as ql  # enable this to calculate sensitivities
 
 # import QuantLib as ql  # enable this for regular QuantLib performance
 
@@ -70,6 +70,7 @@ import time
 # %% [markdown]
 # #### bootstrapping and pricing function
 
+# %%
 
 def priceMulticurveBootstrappingSwap(
     depos: list,
@@ -276,12 +277,10 @@ def priceMulticurveBootstrappingSwap(
         for tenor, quote in swapQuotes
     )
 
-    # tolerance = 1.0e-15
     euribor6MTermStructure = ql.PiecewiseLogCubicDiscount(
         settlementDate,
         euribor6MInstruments,
         termStructureDayCounter,
-        #   ql.IterativeBootstrap(accuracy=tolerance),
     )
 
     forecastingTermStructure = ql.RelinkableYieldTermStructureHandle()
@@ -332,6 +331,7 @@ def priceMulticurveBootstrappingSwap(
 # %% [markdown]
 # #### pricing with sensitivity extraction
 
+# %%
 tape = Tape()
 
 
@@ -422,7 +422,7 @@ def priceWithSensi(
 # %% [markdown]
 # ### Results Printing
 
-
+# %%
 def printResults(
     v, gradient: list, nDepos, nShortOis, ndatesOIS, nlongOIS, nSwapRates, nFRA
 ):
@@ -474,6 +474,7 @@ def printResults(
 # %% [markdown]
 # ### Global Parameters
 
+# %%
 calendar = ql.TARGET()
 todaysDate = ql.Date(11, ql.December, 2012)
 ql.Settings.instance().evaluationDate = todaysDate
@@ -484,7 +485,9 @@ settlementDate = calendar.advance(todaysDate, fixingDays, ql.Days)
 settlementDate = calendar.adjust(settlementDate)
 
 # %% [markdown]
-# EONIA CURVE quotes
+# ### EONIA CURVE quotes
+
+# %%
 termStructureDayCounter = ql.Actual365Fixed()
 depos = [0.0004, 0.0004, 0.0004]
 shortOis = [0.00070, 0.00069, 0.00078, 0.00074]
@@ -552,6 +555,7 @@ swapRates = [
 # %% [markdown]
 # ### Swap Parameters
 
+# %%
 # forward-starting 5 year swap
 
 nominal = 1000000.0
@@ -564,12 +568,17 @@ fwdStart = ql.Period(15, ql.Months)
 # %% [markdown]
 # ### Benchmark Parameters
 
+# %%
 N = 20  # iterations to repeat pricing for performance measurements
 
 # %% [markdown]
 # ### Pricing
 
+# %%
+
+
 if not getattr(ql, "XAD_ENABLED", False):
+    # ql.XAD_ENABLED is set if we're using QuantLib-Risks
     print("Pricing swap with multicurve bootstrapping without sensitivities...")
     start = time.perf_counter_ns()
     for _ in range(N):

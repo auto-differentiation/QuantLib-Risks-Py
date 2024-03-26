@@ -21,9 +21,9 @@
 #if defined(SWIGCSHARP)
 %module(directors="1") NQuantLibc
 #elif defined(SWIGJAVA)
-%module(directors="1") QuantLib
+%module(directors="1") QuantLib_Risks
 #else
-%module quantlib_risks
+%module QuantLib_Risks
 #endif
 
 %include exception.i

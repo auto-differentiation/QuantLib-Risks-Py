@@ -2,8 +2,8 @@
 QuantLib-Risks: Risk-enabled QuantLib Python Bindings
 =====================================================
 
-[![Download source](https://img.shields.io/github/v/release/auto-differentiation/quantlib-risks?label=source&sort=semver)](https://github.com/auto-differentiation/quantlib-risks/releases/latest)
-[![PyPI version](https://img.shields.io/pypi/v/quantlib-risks?label=PyPI)](https://pypi.org/project/quantlib-risks)
+[![Download source](https://img.shields.io/github/v/release/auto-differentiation/QuantLib-Risks?label=source&sort=semver)](https://github.com/auto-differentiation/QuantLib-Risks/releases/latest)
+[![PyPI version](https://img.shields.io/pypi/v/QuantLib-Risks?label=PyPI)](https://pypi.org/project/QuantLib-Risks)
 
 ---
 
@@ -17,7 +17,7 @@ in Python.
 You can install it as:
 
 ```
-pip install quantlib-risks
+pip install QuantLib-Risks
 ```
 
 ## Getting Help
@@ -37,7 +37,7 @@ bindings for languages other than Python). They are unused in this fork.
 ## Versioning
 
 This repository follows the QuantLib versions closely. With each new QuantLib release,
-a new release of quantlib-risks is prepared with the same version number.
+a new release of QuantLib-Risks is prepared with the same version number.
 
 ## License
 

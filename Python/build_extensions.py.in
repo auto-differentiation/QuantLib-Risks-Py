@@ -6,7 +6,7 @@
 #  https://github.com/tim-mitchell/prebuilt_binaries/tree/main
 #
 #
-#  This file is part of quantlib-risks, a Python wrapper for QuantLib enabled
+#  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
 #  a fast and comprehensive C++ library for automatic differentiation.
 #
@@ -48,7 +48,7 @@ class QuantLibExtension(Extension):
             raise ValueError(f"extension file {input_file} does not exist")
         self.input_file = input_file
 
-        super().__init__(f"quantlib_risks.{name}", ["dont-need-this-source-file.c"])
+        super().__init__(f"QuantLib_Risks.{name}", ["dont-need-this-source-file.c"])
 
 class ql_build_ext(build_ext):
     """Overrides build_ext to simply copy the file built with CMake into the
@@ -61,7 +61,7 @@ class ql_build_ext(build_ext):
 
             fullname = self.get_ext_fullname(ext.name)
             filename = self.get_ext_filename(fullname)
-            dest_path = Path(self.build_lib) / "quantlib_risks"
+            dest_path = Path(self.build_lib) / "QuantLib_Risks"
             dest_path.mkdir(parents=True, exist_ok=True)
             dest_filename = dest_path / os.path.basename(filename)
 
@@ -77,8 +77,8 @@ class ql_build_ext(build_ext):
 
 def build(setup_kwargs: dict):
     """Main extension build file"""
-    ext_modules = [QuantLibExtension("_quantlib_risks", 
-                                     'quantlib_risks/_quantlib_risks@QL_MODULE_SUFFIX@')]
+    ext_modules = [QuantLibExtension("_QuantLib_Risks", 
+                                     'QuantLib_Risks/_QuantLib_Risks@QL_MODULE_SUFFIX@')]
     setup_kwargs.update(
         {
             "ext_modules": ext_modules,
