@@ -80,7 +80,7 @@ case "$(uname -sr)" in
      ;;
 esac
 
-if [ "$machine" == "linu" ] ; then
+if [ "$machine" == "linux" ] ; then
     # Linux builds in a container, so we need to install boost there
     curl -O -L https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.gz
     tar xfz boost_*.tar.gz
