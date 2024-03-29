@@ -137,3 +137,7 @@ PyObject *make_PyList_pair_date_vector(
 std::vector<std::pair<QuantLib::Date, Real>>
 make_date_real_pair_vector_from_list(PyObject *obj);
 bool check_date_real_pair_list(PyObject *obj);
+
+/////////// Tape ///////////////
+bool check_Tape(PyObject* obj);
+xad::Tape<double> &make_Tape_ref(PyObject *obj);

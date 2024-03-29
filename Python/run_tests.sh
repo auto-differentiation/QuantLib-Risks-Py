@@ -1,6 +1,7 @@
+#!/bin/bash
+
 ##############################################################################
-#   CMake file for QuantLib-Risks. The version set here is used for the Python
-#   package.
+#   
 #
 #  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
@@ -23,23 +24,22 @@
 #   
 ##############################################################################
 
-cmake_minimum_required(VERSION 3.15.0)
-project(QuantLib_Risks LANGUAGES CXX VERSION 1.33.2)
+set -e
 
-# For MSVC RUNTIME LIBRARY, need CMP0091=NEW and cmake 3.15+
-cmake_policy(SET CMP0091 NEW)
-set(PACKAGE_VERSION       "${PROJECT_VERSION}")
-set(PACKAGE_VERSION_HEX   "0x013302f0")
-set(QLR_VERSION ${PACKAGE_VERSION})
-set(QLR_HEX_VERSION ${PACKAGE_VERSION_HEX})
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+python "${SCRIPT_DIR}/test/QuantLibTestSuite.py"
 
-find_package(QuantLibXad REQUIRED)
-find_package(SWIG REQUIRED)
+cd "${SCRIPT_DIR}/examples"
 
-include(UseSWIG)
+had_errors=0
+for f in "swap-ajoint.py" "swap.py" "multicurve-bootstrapping.py" ; do
+    echo ""
+    echo "----------- RUNNING $f ----------------"
+    python "$f" || had_errors=1
+done
 
-enable_testing()
-
-
-add_subdirectory(Python)
+if [ "$had_errors" == "1" ] ; then
+    echo "there were errors"
+    exit 1
+fi

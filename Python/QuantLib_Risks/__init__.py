@@ -34,7 +34,7 @@
 from .QuantLib_Risks import *
 
 if XAD_ENABLED:
-    from xad_autodiff.adj_1st import Real
+    from xad_autodiff.adj_1st import Real, Tape
     from typing import Union, Tuple, List
 
     # as part of the input at the top, we'll have _QuantLib_Risks in scope
@@ -42,22 +42,61 @@ if XAD_ENABLED:
     DoublePairVector = _QuantLib_Risks.DoublePairVector
     DoubleVectorVector = _QuantLib_Risks.DoubleVectorVector
 
-    def Concentrating1dMesherPoint(x1: Union[Real, float, int], x2: Union[Real, float, int], v: bool) -> Tuple[Real, Real, bool]:
+    def Concentrating1dMesherPoint(
+        x1: Union[Real, float, int], x2: Union[Real, float, int], v: bool
+    ) -> Tuple[Real, Real, bool]:
         return (Real(x1), Real(x2), bool(v))
 
-    def PairDoubleVector(x1: List[Union[Real, float, int]] = [], x2: List[Union[Real, float, int]] = []) -> Tuple[List[Real], List[Real]]:
+    def PairDoubleVector(
+        x1: List[Union[Real, float, int]] = [], x2: List[Union[Real, float, int]] = []
+    ) -> Tuple[List[Real], List[Real]]:
         return ([Real(x) for x in x1], [Real(x) for x in x2])
 
-if hasattr(_QuantLib_Risks,'__version__'):
+    # monkey-patch the tape activation function to register this tape with QuantLib's internal
+    # global tape pointer (we have 2 due to double static linking)
+    def _wrap_tape_activation():
+        original_enter = Tape.__enter__
+
+        def _tape_enter(t: Tape):
+            t = original_enter(t)
+            _QuantLib_Risks._activate_tape(t)
+            return t
+
+        original_exit = Tape.__exit__
+
+        def _tape_exit(t: Tape, *args, **kwargs):
+            original_exit(t, *args, **kwargs)
+            _QuantLib_Risks._deactivate_tape()
+
+        original_activate = Tape.activate
+
+        def _tape_activate(t: Tape):
+            original_activate(t)
+            _QuantLib_Risks._activate_tape(t)
+
+        original_deactivate = Tape.deactivate
+
+        def _tape_deactivate(t: Tape):
+            original_deactivate(t)
+            _QuantLib_Risks._deactivate_tape()
+
+        Tape.__enter__ = _tape_enter
+        Tape.__exit__ = _tape_exit
+        Tape.activate = _tape_activate
+        Tape.deactivate = _tape_deactivate
+
+    _wrap_tape_activation()
+
+if hasattr(_QuantLib_Risks, "__version__"):
     __version__ = _QuantLib_Risks.__version__
-elif hasattr(_QuantLib_Risks.cvar,'__version__'):
+elif hasattr(_QuantLib_Risks.cvar, "__version__"):
     __version__ = _QuantLib_Risks.cvar.__version__
 else:
-    print('Could not find __version__ attribute')
+    print("Could not find __version__ attribute")
 
-if hasattr(_QuantLib_Risks,'__hexversion__'):
+if hasattr(_QuantLib_Risks, "__hexversion__"):
     __hexversion__ = _QuantLib_Risks.__hexversion__
-elif hasattr(_QuantLib_Risks.cvar,'__hexversion__'):
+elif hasattr(_QuantLib_Risks.cvar, "__hexversion__"):
     __hexversion__ = _QuantLib_Risks.cvar.__hexversion__
 else:
-    print('Could not find __hexversion__ attribute')
+    print("Could not find __hexversion__ attribute")

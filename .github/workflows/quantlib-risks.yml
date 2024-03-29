@@ -107,13 +107,14 @@ jobs:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat }}
           CIBW_BEFORE_BUILD_LINUX: /bin/bash ./tools/prebuild_ql-risks.sh
           CIBW_ENVIRONMENT: QLR_PYTHON_VERSION="${{ matrix.python }}"
-          CIBW_ENVIRONMENT_PASS_LINUX: QL_PREFIX HOST_CCACHE_DIR QLR_PYTHON_VERSION
+          CIBW_ENVIRONMENT_PASS_LINUX: QL_PREFIX HOST_CCACHE_DIR QLR_PYTHON_VERSION CIBUILDWHEEL=1
           CIBW_BEFORE_BUILD_WINDOWS: tools\prebuild_ql-risks.bat
           CIBW_BEFORE_BUILD_MACOS: bash ./tools/prebuild_ql-risks.sh
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
-          CIBW_TEST_COMMAND_WINDOWS: python ${{ github.workspace }}/Python/test/QuantLibTestSuite.py
-          CIBW_TEST_COMMAND_MACOS: python ${{ github.workspace }}/Python/test/QuantLibTestSuite.py
-          CIBW_TEST_COMMAND_LINUX: python /host${{ github.workspace }}/Python/test/QuantLibTestSuite.py
+          CIBW_BEFORE_TEST: pip install pandas numpy matplotlib jinja2
+          CIBW_TEST_COMMAND_WINDOWS: ${{ github.workspace }}/Python/run_tests.bat
+          CIBW_TEST_COMMAND_MACOS: bash ${{ github.workspace }}/Python/run_tests.sh
+          CIBW_TEST_COMMAND_LINUX: bash /host${{ github.workspace }}/Python/run_tests.sh
           CIBW_BUILD_VERBOSITY: 2
         with:
           package-dir: build/${{ matrix.preset }}/Python

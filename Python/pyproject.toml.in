@@ -84,7 +84,7 @@ generate-setup-file = false
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-xad-autodiff = "*"
+xad-autodiff = ">=1.5.1"
 
 
 [build-system]
