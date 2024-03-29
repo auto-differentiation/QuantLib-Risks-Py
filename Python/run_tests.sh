@@ -33,7 +33,7 @@ python "${SCRIPT_DIR}/test/QuantLibTestSuite.py"
 cd "${SCRIPT_DIR}/examples"
 
 had_errors=0
-for f in "swap-ajoint.py" "swap.py" "multicurve-bootstrapping.py" ; do
+for f in "swap-adjoint.py" "swap.py" "multicurve-bootstrapping.py" ; do
     echo ""
     echo "----------- RUNNING $f ----------------"
     python "$f" || had_errors=1
