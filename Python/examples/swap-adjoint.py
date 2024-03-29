@@ -366,3 +366,7 @@ show(forward)
 print("\n---------------- deposit/FRA/swap curve, 1-year forward swap")
 forecastTermStructure.linkTo(depoFraSwapCurve)
 show(forward)
+
+# %%
+
+tape.deactivate()
