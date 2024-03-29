@@ -617,3 +617,14 @@ void add_to_module(PyObject *mdef) {
              self.assign(n, std::pair<Real, Real>(x.first, x.second));
            });
 }
+
+bool check_Tape(PyObject* obj) {
+  auto p = py::reinterpret_borrow<py::object>(obj);
+  return py::isinstance<xad::Tape<double>>(p);  
+}
+
+xad::Tape<double> &make_Tape_ref(PyObject *obj)
+{
+  auto p = py::reinterpret_borrow<py::object>(obj);
+  return py::cast<xad::Tape<double>&>(p);  
+}

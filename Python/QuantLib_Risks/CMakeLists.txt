@@ -24,7 +24,10 @@
 
 set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY USE_SWIG_DEPENDENCIES TRUE)
-set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY COMPILE_OPTIONS -DQL_XAD=1)
+set_property(SOURCE ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i PROPERTY COMPILE_OPTIONS 
+    -DQL_XAD=1 
+    -DQLR_VERSION=\"${QLR_VERSION}\" 
+    -DQLR_HEX_VERSION=${QLR_HEX_VERSION})
 swig_add_library(QuantLib_Risks
                  LANGUAGE python
                  OUTPUT_DIR .
@@ -32,7 +35,7 @@ swig_add_library(QuantLib_Risks
 )
 target_link_libraries(QuantLib_Risks PRIVATE Python3::Module QuantLib::QuantLib pybind11::headers)
 target_compile_features(QuantLib_Risks PRIVATE c_std_17)
-target_compile_definitions(QuantLib_Risks PRIVATE QL_XAD=1)
+target_compile_definitions(QuantLib_Risks PRIVATE QL_XAD=1 QLR_VERSION=\"${QLR_VERSION}\" QLR_HEX_VERSION=${QLR_HEX_VERSION})
 target_include_directories(QuantLib_Risks PRIVATE .)
 set_property(TARGET QuantLib_Risks PROPERTY SUFFIX "${QL_MODULE_SUFFIX}")
 if(MSVC)

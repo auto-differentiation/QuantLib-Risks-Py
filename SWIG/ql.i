@@ -108,6 +108,9 @@ GNU autoconf configure script.
 QL_DEPRECATED_DISABLE_WARNING
 %}
 
+#ifdef QL_XAD
+%include tape.i
+#endif
 %include common.i
 %include vectors.i
 %include tuple.i
