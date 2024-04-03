@@ -5,5 +5,5 @@
 	path = lib/XAD
 	url = https://github.com/auto-differentiation/XAD.git
 [submodule "lib/QuantLib-Risks-Cpp"]
-	path = lib/QuantLibRisks-Cpp
+	path = lib/QuantLib-Risks-Cpp
 	url = https://github.com/auto-differentiation/QuantLib-Risks-Cpp.git
