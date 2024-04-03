@@ -34,7 +34,7 @@
 from .QuantLib_Risks import *
 
 if XAD_ENABLED:
-    from xad_autodiff.adj_1st import Real, Tape
+    from xad.adj_1st import Real, Tape
     from typing import Union, Tuple, List
 
     # as part of the input at the top, we'll have _QuantLib_Risks in scope

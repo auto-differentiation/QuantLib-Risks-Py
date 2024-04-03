@@ -16,7 +16,7 @@ pip install QuantLib-Risks
 
 ```python
 import QuantLib_Risks as ql
-from xad_autodiff.adj_1st import Tape
+from xad.adj_1st import Tape
 
 with Tape() as t:
     rate = ql.Real(0.2)

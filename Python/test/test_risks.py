@@ -34,7 +34,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 
 import unittest
 import QuantLib_Risks as ql
-from xad_autodiff.adj_1st import Tape
+from xad.adj_1st import Tape
 
 class SwapWithSensiTest(unittest.TestCase):
     def setUp(self):

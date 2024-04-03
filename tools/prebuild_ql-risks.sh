@@ -52,7 +52,7 @@ elif [ "$QLR_PYTHON_VERSION" == "cp312" ] ; then
 fi
 
 export QL_DIR=$(pwd)/lib/QuantLib
-export QLXAD_DIR=$(pwd)/lib/quantlib-xad
+export QLRISKS_DIR=$(pwd)/lib/QuantLib-Risks-Cpp
 export XAD_DIR=$(pwd)/lib/XAD
 export QLSWIG_DIR=$(pwd)
 
@@ -105,7 +105,7 @@ git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git config user.name "github-actions[bot]"
 git log | grep -q "Uses Real in GemoetricBrownianMotionProcess instead of double" || (git fetch --all && git cherry-pick 6bb9c1f18ff6d4c47f06a66136fb83411207e67c)
 if [ "$machine" != "macos" ] ; then
-    cp -f "$QLXAD_DIR/presets/CMakeUserPresets.json" .
+    cp -f "$QLRISKS_DIR/presets/CMakeUserPresets.json" .
     cmake --preset "$QL_PRESET" \
     -DCMAKE_INSTALL_PREFIX="$CMAKE_INSTALL_PREFIX" \
     -DXAD_ENABLE_TESTS=OFF \
@@ -125,8 +125,8 @@ else
       $CCACHE_OPTION \
       -DCMAKE_BUILD_TYPE=Release \
       -DQLXAD_DISABLE_AAD=OFF \
-      -DQL_EXTERNAL_SUBDIRECTORIES="$XAD_DIR;$QLXAD_DIR" \
-      -DQL_EXTRA_LINK_LIBRARIES="quantlib-xad" \
+      -DQL_EXTERNAL_SUBDIRECTORIES="$XAD_DIR;$QLRISKS_DIR" \
+      -DQL_EXTRA_LINK_LIBRARIES="QuantLib-Risks" \
       -DQL_NULL_AS_FUNCTIONS=ON \
       -DXAD_NO_THREADLOCAL=ON 
 fi

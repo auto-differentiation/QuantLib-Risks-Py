@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Tape activation functions to ensure an xad-autodiff global tape instance
+ *  Tape activation functions to ensure an xad global tape instance
  *  matches the one in QuantLib-Risks. 
  *
  *  This file is part of QuantLib-Risks, a Python wrapper for QuantLib enabled

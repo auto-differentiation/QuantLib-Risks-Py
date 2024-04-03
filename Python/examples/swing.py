@@ -46,7 +46,7 @@
 # FOR A PARTICULAR PURPOSE.  See the license for more details.
 
 import QuantLib_Risks as ql
-from xad_autodiff import math
+from xad import math
 
 todaysDate = ql.Date(30, ql.September, 2018)
 ql.Settings.instance().evaluationDate = todaysDate

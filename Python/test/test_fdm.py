@@ -34,7 +34,7 @@ import unittest
 
 import QuantLib_Risks as ql
 if ql.XAD_ENABLED:
-    from xad_autodiff import math
+    from xad import math
 else:
     import math
 

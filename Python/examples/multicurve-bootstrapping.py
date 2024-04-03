@@ -64,7 +64,7 @@ import QuantLib_Risks as ql  # enable this to calculate sensitivities
 
 # import QuantLib as ql  # enable this for regular QuantLib performance
 
-from xad_autodiff.adj_1st import Tape
+from xad.adj_1st import Tape
 import time
 
 # %% [markdown]

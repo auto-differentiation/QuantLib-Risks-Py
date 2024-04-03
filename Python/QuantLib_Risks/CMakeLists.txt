@@ -34,7 +34,7 @@ swig_add_library(QuantLib_Risks
                  SOURCES ${PROJECT_SOURCE_DIR}/SWIG/quantlib.i converters.cpp
 )
 target_link_libraries(QuantLib_Risks PRIVATE Python3::Module QuantLib::QuantLib pybind11::headers)
-target_compile_features(QuantLib_Risks PRIVATE c_std_17)
+target_compile_features(QuantLib_Risks PRIVATE cxx_std_17)
 target_compile_definitions(QuantLib_Risks PRIVATE QL_XAD=1 QLR_VERSION=\"${QLR_VERSION}\" QLR_HEX_VERSION=${QLR_HEX_VERSION})
 target_include_directories(QuantLib_Risks PRIVATE .)
 set_property(TARGET QuantLib_Risks PROPERTY SUFFIX "${QL_MODULE_SUFFIX}")

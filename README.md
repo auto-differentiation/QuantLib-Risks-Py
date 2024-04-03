@@ -1,16 +1,18 @@
 
-QuantLib-Risks: Risk-enabled QuantLib Python Bindings
-=====================================================
+QuantLib-Risks: Risk-enabled QuantLib for Python
+================================================
 
-[![Download source](https://img.shields.io/github/v/release/auto-differentiation/QuantLib-Risks?label=source&sort=semver)](https://github.com/auto-differentiation/QuantLib-Risks/releases/latest)
+[![Download source](https://img.shields.io/github/v/release/auto-differentiation/QuantLib-Risks-Py?label=source&sort=semver)](https://github.com/auto-differentiation/QuantLib-Risks-Py/releases/latest)
 [![PyPI version](https://img.shields.io/pypi/v/QuantLib-Risks?label=PyPI)](https://pypi.org/project/QuantLib-Risks)
 
 ---
 
-This fork of [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG) builds QuantLib Python bindings with automatic differentiation, enabling
+This repository builds QuantLib Python bindings with automatic differentiation, enabling
 fast risks calculation with QuantLib in Python.
-It wraps [quantlib-xad](https://github.com/auto-differentiation/quantlib-xad)
+It wraps [C++ QuantLib-Risks](https://github.com/auto-differentiation/QuantLib-Risks-Cpp)
 in Python.
+It is based on [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG) and
+is kept in sync with it.
 
 ## Getting Started
 
@@ -22,9 +24,14 @@ pip install QuantLib-Risks
 
 ## Getting Help
 
-For documentation and other resources, see https://auto-differentiation.github.io/quantlib .
+For documentation and other resources, see https://auto-differentiation.github.io/quantlib-risks/python/ .
 
-If you have found an issue, want to report a bug, or have a feature request, please raise a [GitHub issue](https://github.com/auto-differentiation/XAD/issues).
+If you have found an issue, want to report a bug, or have a feature request, please raise a [GitHub issue](https://github.com/auto-differentiation/QuantLib-Risks-Py/issues).
+
+## Related Projects
+
+- XAD Comprehensive automatic differentiation in [Python](https://github.com/auto-differentiation/xad-py) and [C++](https://github.com/auto-differentiation/xad)
+- QuantLib-Risks: Fast risk evaluations in [Python](https://github.com/auto-differentiation/QuantLib-Risks-Py) and [C++](https://github.com/auto-differentiation/QuantLib-Risks-Cpp)
 
 ## Contributing
 

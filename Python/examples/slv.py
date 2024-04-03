@@ -59,7 +59,7 @@ if sys.version_info.major < 3:
 import QuantLib_Risks as ql
 from matplotlib import pyplot as plt
 import numpy as np
-from xad_autodiff import math, value
+from xad import math, value
 
 # %matplotlib inline
 

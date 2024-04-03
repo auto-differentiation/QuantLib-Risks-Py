@@ -24,17 +24,17 @@
 ##############################################################################
 
 cmake_minimum_required(VERSION 3.15.0)
-project(QuantLib_Risks LANGUAGES CXX VERSION 1.33.2)
+project(QuantLib_Risks LANGUAGES CXX VERSION 1.33.3)
 
 # For MSVC RUNTIME LIBRARY, need CMP0091=NEW and cmake 3.15+
 cmake_policy(SET CMP0091 NEW)
 set(PACKAGE_VERSION       "${PROJECT_VERSION}")
-set(PACKAGE_VERSION_HEX   "0x013302f0")
+set(PACKAGE_VERSION_HEX   "0x013303f0")
 set(QLR_VERSION ${PACKAGE_VERSION})
 set(QLR_HEX_VERSION ${PACKAGE_VERSION_HEX})
 
 
-find_package(QuantLibXad REQUIRED)
+find_package(QuantLib-Risks REQUIRED)
 find_package(SWIG REQUIRED)
 
 include(UseSWIG)

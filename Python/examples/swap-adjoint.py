@@ -48,7 +48,7 @@
 
 # %%
 import QuantLib_Risks as ql
-from xad_autodiff.adj_1st import Tape
+from xad.adj_1st import Tape
 
 # %% [markdown]
 # ### Global data
