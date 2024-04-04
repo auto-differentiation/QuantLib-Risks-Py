@@ -89,7 +89,7 @@ priority = "explicit"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-xad = {version = "1.5.1.1", source = "test-pypi"}
+xad = {version = "1.5.1.2", source = "test-pypi"}
 
 
 [build-system]
