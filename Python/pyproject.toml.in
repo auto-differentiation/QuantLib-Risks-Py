@@ -82,9 +82,14 @@ tracker = "https://github.com/auto-differentiation/XAD/issues"
 script = "build_extensions.py"
 generate-setup-file = false
 
+[[tool.poetry.source]]
+name = "test"
+url = "https://test.pypi.org/simple/"
+priority = "explicit"
+
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-xad = ">=1.5.1"
+xad = {version = "1.5.1.1", source = "test-pypi"}
 
 
 [build-system]
