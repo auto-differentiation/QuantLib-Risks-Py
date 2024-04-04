@@ -11,7 +11,7 @@ This repository builds QuantLib Python bindings with automatic differentiation, 
 fast risks calculation with QuantLib in Python.
 It wraps [C++ QuantLib-Risks](https://github.com/auto-differentiation/QuantLib-Risks-Cpp)
 in Python.
-It is based on [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG) and
+It uses elements from [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG) and
 is kept in sync with it.
 
 ## Getting Started
@@ -38,9 +38,6 @@ If you have found an issue, want to report a bug, or have a feature request, ple
 Please read [CONTRIBUTING](CONTRIBUTING.md) for the process of contributing to this project.
 Please also obey our [Code of Conduct](CODE_OF_CONDUCT.md) in all communication.
 
-Note that large parts of this repository are left from the fork's origin (e.g. 
-bindings for languages other than Python). They are unused in this fork.
-
 ## Versioning
 
 This repository follows the QuantLib versions closely. With each new QuantLib release,
@@ -51,6 +48,6 @@ a new release of QuantLib-Risks is prepared with the same version number.
 This project is licensed under the GNU Affero General Public License - see the [LICENSE.md](LICENSE.md) file for details.
 
 It contains code from [QuantLib](https://www.quantlib.org) 
-and is based on [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG), 
+and [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG), 
 which are shipped with a different (compatible) license.
 Both licenses are included in [LICENSE.md](LICENSE.md)
