@@ -4,7 +4,7 @@ It provides the same interface as the [standard QuantLib package](https://pypi.o
 Useful links:
 
 -   [QuantLib Documentation](https://www.quantlib.org)
--   [XAD Documentation, incl Python bindings and QuantLib integration](https://auto-differentiation.github.io/quantlib/python/)
+-   [XAD Documentation, incl Python bindings and QuantLib integration](https://auto-differentiation.github.io/quantlib-risks/python/)
 
 ## Installation
 
