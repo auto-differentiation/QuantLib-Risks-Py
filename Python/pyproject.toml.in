@@ -32,8 +32,8 @@ authors = [
 ]
 readme = "README.md"
 homepage = "https://auto-differentiation.github.io"
-repository = "https://github.com/auto-differentiation/XAD"
-documentation = "https://auto-differentiation.github.io/quantlib"
+repository = "https://github.com/auto-differentiation/QuantLib-Risks-Py"
+documentation = "https://auto-differentiation.github.io/quantlib-risks"
 keywords = [
     "automatic-differentiation",
     "derivatives",
@@ -76,20 +76,15 @@ exclude = [
 
 [tool.poetry.urls]
 download = "https://pypi.org/project/QuantLib-Risks/#files"
-tracker = "https://github.com/auto-differentiation/XAD/issues"
+tracker = "https://github.com/auto-differentiation/QuantLib-Risks-Py/issues"
 
 [tool.poetry.build]
 script = "build_extensions.py"
 generate-setup-file = false
 
-[[tool.poetry.source]]
-name = "test"
-url = "https://test.pypi.org/simple/"
-priority = "explicit"
-
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-xad = {version = "1.5.1.4", source = "test-pypi"}
+xad = ">=1.5.2"
 
 
 [build-system]

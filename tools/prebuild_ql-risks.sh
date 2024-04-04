@@ -135,7 +135,7 @@ cd "build/$QL_PRESET"
 cmake --build .
 cmake --install .
 
-echo "Step 2: Build QuantLib-SWIG"
+echo "Step 2: Build Python bindings"
 cd "$QLSWIG_DIR"
 mkdir -p "build/$QL_PRESET"
 cd "build/$QL_PRESET"
