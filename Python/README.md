@@ -34,3 +34,8 @@ with Tape() as t:
     print(f"price = {npv}")
     print(f"delta = {rate.derivative}")
 ```
+
+## Related Projects
+
+- XAD Comprehensive automatic differentiation in [Python](https://github.com/auto-differentiation/xad-py) and [C++](https://github.com/auto-differentiation/xad)
+- QuantLib-Risks: Fast risk evaluations in [Python](https://github.com/auto-differentiation/QuantLib-Risks-Py) and [C++](https://github.com/auto-differentiation/QuantLib-Risks-Cpp)
