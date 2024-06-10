@@ -102,7 +102,7 @@ jobs:
             mkdir -p build/${{ matrix.preset }}/Python
             touch build/${{ matrix.preset }}/Python/setup.py
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.17.0
+        uses: pypa/cibuildwheel@v2.19.0
         env:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat }}
           CIBW_BEFORE_BUILD_LINUX: /bin/bash ./tools/prebuild_ql-risks.sh
