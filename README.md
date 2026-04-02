@@ -1,3 +1,5 @@
+> Part of the [XAD ecosystem](https://github.com/auto-differentiation) — the fastest automatic differentiation library for C++.
+> If this is useful to you, please star the [core XAD repository](https://github.com/auto-differentiation/xad).
 
 QuantLib-Risks: Risk-enabled QuantLib for Python
 ================================================
