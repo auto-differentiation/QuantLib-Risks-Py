@@ -100,11 +100,7 @@ jobs:
           submodules: recursive
           persist-credentials: false
       - name: Build sdist
-        # no isolation until xad 2.2 is on PyPI
-        run: |
-          python3 -m venv /tmp/sdist-env
-          /tmp/sdist-env/bin/pip install build "scikit-build-core>=0.11"
-          /tmp/sdist-env/bin/python -m build --sdist --no-isolation --skip-dependency-check
+        run: pipx run build --sdist
       - name: Check metadata
         run: pipx run twine check --strict dist/*
       - name: Upload sdist
