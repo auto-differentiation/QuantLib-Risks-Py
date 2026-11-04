@@ -74,7 +74,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1.13.0
       - name: Build wheels
-        uses: pypa/cibuildwheel@v4.3.4
+        uses: pypa/cibuildwheel@v4.3.5
         env:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.platform.build }}
           # Linux builds run in containers: ccache installed there, cache on the host (/host)
