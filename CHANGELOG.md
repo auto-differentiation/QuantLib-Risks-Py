@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Colab notebooks in `notebooks/`: option Greeks and curve risk in one adjoint sweep
+- Example `trade-risk.py`: sensitivities of every swap in a book to every curve quote with AAD
 
 
 ## [1.44.0] - 2026-11-12
