@@ -680,17 +680,17 @@ QuantLib-SWIG is
     Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2020, 2022, 2023 StatPro Italia srl
     Copyright (C) 2005 Dominic Thuillier
     Copyright (C) 2005 Johan Witters
-    Copyright (C) 2006, 2007, 2010 Joseph Wang
     Copyright (C) 2007 Eric H. Jensen
     Copyright (C) 2007 Luis Cota
     Copyright (C) 2007 Richard Gomes
     Copyright (C) 2007, 2008 Tito Ingargiola
+    Copyright (C) 2007, 2010 Joseph Wang
     Copyright (C) 2008 Allen Kuo
     Copyright (C) 2008 Florent Grenier
     Copyright (C) 2009 Joseph Malicki
     Copyright (C) 2010 Andrea Odetti
     Copyright (C) 2010, 2011 Lluis Pujol Bajador
-    Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2018, 2019, 2020, 2021, 2022, 2023 Klaus Spanderen
+    Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Klaus Spanderen
     Copyright (C) 2011, 2012 Tawanda Gwena
     Copyright (C) 2012 Francis Duffy
     Copyright (C) 2013 Simon Shakeshaft
@@ -710,10 +710,15 @@ QuantLib-SWIG is
     Copyright (C) 2020 Gorazd Brumen
     Copyright (C) 2020, 2021, 2022 Jack Gillett
     Copyright (C) 2020, 2021, 2023 Marcin Rybacki
-    Copyright (C) 2021 Ralf Konrad Eckel
+    Copyright (C) 2021, 2024 Ralf Konrad Eckel
     Copyright (C) 2022 Ignacio Anguita
-    Copyright (C) 2022, 2023 Skandinaviska Enskilda Banken AB (publ)
+    Copyright (C) 2022, 2023, 2024 Skandinaviska Enskilda Banken AB (publ)
     Copyright (C) 2023 Francois Botha
+    Copyright (C) 2025 Hiroto Ogawa
+    Copyright (C) 2026 Arihant Lodha
+    Copyright (C) 2026 Kyrylo Protsenko
+    Copyright (C) 2026 Lawrenz Law
+    Copyright (C) 2026 Mahimn Patel
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

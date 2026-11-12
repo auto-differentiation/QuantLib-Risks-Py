@@ -1,7 +1,7 @@
 diff --git a/SWIG/piecewiseyieldcurve.i b/SWIG/piecewiseyieldcurve.i
 --- a/SWIG/piecewiseyieldcurve.i
 +++ b/SWIG/piecewiseyieldcurve.i
-@@ -35,14 +35,14 @@ using QuantLib::PiecewiseYieldCurve;
+@@ -37,14 +37,14 @@ using QuantLib::SimpleZeroYield;
  
  %{
  struct _IterativeBootstrap {
@@ -20,7 +20,7 @@ diff --git a/SWIG/piecewiseyieldcurve.i b/SWIG/piecewiseyieldcurve.i
                          Size maxAttempts = 1,
                          Real maxFactor = 2.0,
                          Real minFactor = 2.0,
-@@ -71,9 +71,9 @@ struct _IterativeBootstrap {
+@@ -73,9 +73,9 @@ struct _IterativeBootstrap {
      #if !defined(SWIGJAVA) && !defined(SWIGCSHARP)
      %feature("kwargs") _IterativeBootstrap;
      #endif
@@ -33,7 +33,7 @@ diff --git a/SWIG/piecewiseyieldcurve.i b/SWIG/piecewiseyieldcurve.i
                          Size maxAttempts = 1,
                          Real maxFactor = 2.0,
                          Real minFactor = 2.0,
-@@ -201,16 +201,16 @@ class AdditionalDates {
+@@ -215,11 +215,11 @@ class AdditionalDates {
  struct _GlobalBootstrap {
      std::vector<ext::shared_ptr<RateHelper> > additionalHelpers;
      std::vector<Date> additionalDates;
@@ -41,30 +41,34 @@ diff --git a/SWIG/piecewiseyieldcurve.i b/SWIG/piecewiseyieldcurve.i
 +    Real accuracy;
      ext::shared_ptr<OptimizationMethod> optimizer;
      ext::shared_ptr<EndCriteria> endCriteria;
+     std::vector<Real> initialGuess;
 -    _GlobalBootstrap(double accuracy = Null<double>(),
 +    _GlobalBootstrap(Real accuracy = Null<Real>(),
                       ext::shared_ptr<OptimizationMethod> optimizer = nullptr,
-                      ext::shared_ptr<EndCriteria> endCriteria = nullptr)
-     : accuracy(accuracy), optimizer(optimizer), endCriteria(endCriteria) {}
+                      ext::shared_ptr<EndCriteria> endCriteria = nullptr,
+                      const std::vector<Real>& initialGuess = std::vector<Real>())
+@@ -227,7 +227,7 @@ struct _GlobalBootstrap {
+       initialGuess(initialGuess) {}
     _GlobalBootstrap(const std::vector<ext::shared_ptr<RateHelper> >& additionalHelpers,
                      const std::vector<Date>& additionalDates,
 -                    double accuracy = Null<double>(),
 +                    Real accuracy = Null<Real>(),
                      ext::shared_ptr<OptimizationMethod> optimizer = nullptr,
-                     ext::shared_ptr<EndCriteria> endCriteria = nullptr)
-    : additionalHelpers(additionalHelpers), additionalDates(additionalDates), accuracy(accuracy),
-@@ -220,12 +220,12 @@ struct _GlobalBootstrap {
+                     ext::shared_ptr<EndCriteria> endCriteria = nullptr,
+                     const std::vector<Real>& initialGuess = std::vector<Real>())
+@@ -265,13 +265,13 @@ inline typename Curve::bootstrap_type make_global_bootstrap(const _GlobalBootstr
  
  %rename(GlobalBootstrap) _GlobalBootstrap;
  struct _GlobalBootstrap {
 -    _GlobalBootstrap(doubleOrNull accuracy = Null<double>(),
 +    _GlobalBootstrap(doubleOrNull accuracy = Null<Real>(),
                       ext::shared_ptr<OptimizationMethod> optimizer = nullptr,
-                      ext::shared_ptr<EndCriteria> endCriteria = nullptr);
+                      ext::shared_ptr<EndCriteria> endCriteria = nullptr,
+                      const std::vector<Real>& initialGuess = std::vector<Real>());
      _GlobalBootstrap(const std::vector<ext::shared_ptr<RateHelper> >& additionalHelpers,
                       const std::vector<Date>& additionalDates,
 -                     doubleOrNull accuracy = Null<double>(),
 +                     doubleOrNull accuracy = Null<Real>(),
                       ext::shared_ptr<OptimizationMethod> optimizer = nullptr,
-                      ext::shared_ptr<EndCriteria> endCriteria = nullptr);
- };
+                      ext::shared_ptr<EndCriteria> endCriteria = nullptr,
+                      const std::vector<Real>& initialGuess = std::vector<Real>());

@@ -30,6 +30,7 @@
 %include currencies.i
 %include types.i
 %include termstructures.i
+%include scheduler.i
 %include timeseries.i
 %include vectors.i
 %include boost_shared_ptr.i
@@ -43,13 +44,8 @@ class IndexManager {
     IndexManager();
   public:
     static IndexManager& instance();
-    void setHistory(const std::string& name, const TimeSeries<Real>& fixings);
-    const TimeSeries<Real>& getHistory(const std::string& name) const;
-    bool hasHistory(const std::string& name) const;
     std::vector<std::string> histories() const;
-    void clearHistory(const std::string& name);
     void clearHistories();
-    bool hasHistoricalFixing(const std::string& name, const Date& fixingDate) const;
 };
 
 
@@ -131,8 +127,7 @@ class IborIndex : public InterestRateIndex {
               BusinessDayConvention convention,
               bool endOfMonth,
               const DayCounter& dayCounter,
-              const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+              const Handle<YieldTermStructure>& h = {});
     BusinessDayConvention businessDayConvention() const;
     bool endOfMonth() const;
     Handle<YieldTermStructure> forwardingTermStructure() const;
@@ -155,13 +150,26 @@ class OvernightIndex : public IborIndex {
                    const Currency& currency,
                    const Calendar& calendar,
                    const DayCounter& dayCounter,
-                   const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+                   const Handle<YieldTermStructure>& h = {});
     %extend {
         ext::shared_ptr<OvernightIndex> clone(const Handle<YieldTermStructure>& h) const {
             return ext::dynamic_pointer_cast<OvernightIndex>(self->clone(h));
         }
     }
+};
+
+%{
+using QuantLib::BMAIndex;
+%}
+
+%shared_ptr(BMAIndex)
+
+class BMAIndex : public InterestRateIndex {
+  public:
+    BMAIndex(const Handle<YieldTermStructure>& h = {});
+    Handle<YieldTermStructure> forwardingTermStructure() const;
+    Date maturityDate(const Date& valueDate) const;
+    Schedule fixingSchedule(const Date& start, const Date& end);
 };
 
 %{
@@ -179,8 +187,7 @@ class Libor : public IborIndex {
           const Currency& currency,
           const Calendar& financialCenterCalendar,
           const DayCounter& dayCounter,
-          const Handle<YieldTermStructure>& h =
-                                     Handle<YieldTermStructure>());
+          const Handle<YieldTermStructure>& h = {});
     Calendar jointCalendar() const;
 };
 
@@ -193,8 +200,7 @@ class DailyTenorLibor : public IborIndex {
                     const Currency& currency,
                     const Calendar& financialCenterCalendar,
                     const DayCounter& dayCounter,
-                    const Handle<YieldTermStructure>& h =
-                                     Handle<YieldTermStructure>());
+                    const Handle<YieldTermStructure>& h = {});
 };
 
 %{
@@ -230,8 +236,7 @@ using QuantLib::Name;
 class Name : public IborIndex {
   public:
       Name(const Period& tenor,
-           const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+           const Handle<YieldTermStructure>& h = {});
 };
 %enddef
 
@@ -243,8 +248,7 @@ using QuantLib::Name;
 
 class Name : public Base {
   public:
-      Name(const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+    Name(const Handle<YieldTermStructure>& h = {});
 };
 %enddef
 
@@ -256,8 +260,7 @@ using QuantLib::Name;
 
 class Name : public OvernightIndex {
   public:
-      Name(const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+    Name(const Handle<YieldTermStructure>& h = {});
 };
 %enddef
 
@@ -269,8 +272,7 @@ using QuantLib::Name;
 
 class Name : public DailyTenorLibor {
   public:
-      Name(const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+    Name(const Handle<YieldTermStructure>& h = {});
 };
 %enddef
 
@@ -314,9 +316,12 @@ class SwapIndex : public InterestRateIndex {
 };
 
 #if defined(SWIGCSHARP)
+SWIG_STD_VECTOR_ENHANCED( ext::shared_ptr<IborIndex> )
 SWIG_STD_VECTOR_ENHANCED( ext::shared_ptr<SwapIndex> )
 #endif
 namespace std {
+    %template(IborIndexVector)
+        vector<ext::shared_ptr<IborIndex> >;
     %template(SwapIndexVector)
         vector<ext::shared_ptr<SwapIndex> >;
 }
@@ -329,8 +334,7 @@ using QuantLib::Name;
 class Name : public SwapIndex {
   public:
     Name(const Period &tenor,
-         const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+         const Handle<YieldTermStructure>& h = {});
     Name(const Period &tenor,
          const Handle<YieldTermStructure>& h1,
          const Handle<YieldTermStructure>& h2);
@@ -344,8 +348,7 @@ using QuantLib::Name;
 %shared_ptr(Name)
 class Name : public Base {
   public:
-    Name(const Handle<YieldTermStructure>& h =
-                                    Handle<YieldTermStructure>());
+    Name(const Handle<YieldTermStructure>& h = {});
     Name(const Handle<YieldTermStructure>& h1,
          const Handle<YieldTermStructure>& h2);
 };
@@ -377,6 +380,13 @@ class SwapSpreadIndex : public InterestRateIndex {
     Real gearing1();
     Real gearing2();
 };
+
+%inline %{
+    ext::shared_ptr<SwapSpreadIndex> as_swap_spread_index(
+                          const ext::shared_ptr<InterestRateIndex>& index) {
+        return ext::dynamic_pointer_cast<SwapSpreadIndex>(index);
+    }
+%}
 
 %{
 using QuantLib::EquityIndex;
@@ -452,6 +462,7 @@ export_xibor_instance(Mosprime);
 export_xibor_instance(NZDLibor);
 export_xibor_instance(Pribor);
 export_xibor_instance(Robor);
+export_xibor_instance(Nibor);
 export_xibor_instance(SEKLibor);
 export_xibor_instance(Shibor);
 export_xibor_instance(Tibor);
@@ -474,10 +485,12 @@ export_overnight_instance(FedFunds);
 export_overnight_instance(Kofr);
 export_overnight_instance(Nzocr);
 export_overnight_instance(Saron);
+export_overnight_instance(Shir);
 export_overnight_instance(Sofr);
 export_overnight_instance(Sonia);
 export_overnight_instance(Swestr);
 export_overnight_instance(Tonar);
+export_overnight_instance(Zaronia);
 
 #if defined(SWIGPYTHON)
 deprecate_feature(Tona, Tonar);

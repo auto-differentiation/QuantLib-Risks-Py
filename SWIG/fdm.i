@@ -29,6 +29,7 @@
 %include dividends.i
 %include settings.i
 %include shortratemodels.i
+%include volatilities.i
 
 
 // mesher
@@ -417,11 +418,13 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
     }
 
     Array apply(const Array& r) const {
-        return apply(r, "apply");        
+        static PyObject* s_methodName = PyUnicode_InternFromString("apply");
+        return apply(r, s_methodName, "apply");
     }
 
     Array apply_mixed(const Array& r) const {
-        return apply(r, "apply_mixed");        
+        static PyObject* s_methodName = PyUnicode_InternFromString("apply_mixed");
+        return apply(r, s_methodName, "apply_mixed");
     }
 
     Array apply_direction(Size direction, const Array& r) const {
@@ -469,12 +472,12 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
     }
 
   private:
-    Array apply(const Array& r, const char* methodName) const {
+    Array apply(const Array& r, PyObject* pyMethodName, const char* methodName) const {
         auto pyArray = PyPtr::fromNew(SWIG_NewPointerObj(
             SWIG_as_voidptr(&r), SWIGTYPE_p_Array, 0));
 
         auto pyResult = PyPtr::fromNew(
-            PyObject_CallMethod(callback_.get(), methodName, "O", pyArray.get()));
+            PyObject_CallMethodObjArgs(callback_.get(), pyMethodName, pyArray.get(), NULL));
 
         return extractArray(pyResult.get(), methodName);
     }
@@ -789,6 +792,9 @@ class FdmHullWhiteOp : public FdmLinearOpComposite {
 
 %shared_ptr(FdmLocalVolFwdOp)
 class FdmLocalVolFwdOp : public FdmLinearOpComposite {
+    #if !defined(SWIGJAVA) && !defined(SWIGCSHARP)
+    %feature("kwargs") FdmLocalVolFwdOp;
+    #endif
   public:
       FdmLocalVolFwdOp(
         const ext::shared_ptr<FdmMesher>& mesher,
@@ -801,6 +807,9 @@ class FdmLocalVolFwdOp : public FdmLinearOpComposite {
 
 %shared_ptr(FdmOrnsteinUhlenbeckOp)
 class FdmOrnsteinUhlenbeckOp : public FdmLinearOpComposite {
+    #if !defined(SWIGJAVA) && !defined(SWIGCSHARP)
+    %feature("kwargs") FdmOrnsteinUhlenbeckOp;
+    #endif
   public:
     FdmOrnsteinUhlenbeckOp(
         const ext::shared_ptr<FdmMesher>& mesher,
@@ -1497,6 +1506,9 @@ class FdmSimpleStorageCondition : public StepCondition<Array> {
 
 %shared_ptr(FdmSimpleSwingCondition)
 class FdmSimpleSwingCondition : public StepCondition<Array> {
+    #if !defined(SWIGJAVA) && !defined(SWIGCSHARP)
+    %feature("kwargs") FdmSimpleSwingCondition;
+    #endif
   public:
       FdmSimpleSwingCondition(
               const std::vector<Time> & exerciseTimes,
@@ -1788,6 +1800,7 @@ using QuantLib::GBSMRNDCalculator;
 using QuantLib::HestonRNDCalculator;
 using QuantLib::LocalVolRNDCalculator;
 using QuantLib::SquareRootProcessRNDCalculator;
+using QuantLib::SmileSectionRNDCalculator;
 %}
 
 %shared_ptr(FdmIndicesOnBoundary)
@@ -1882,6 +1895,19 @@ class SquareRootProcessRNDCalculator : public RiskNeutralDensityCalculator {
     Real stationary_pdf(Real v) const;
     Real stationary_cdf(Real v) const;
     Real stationary_invcdf(Real q) const;
+};
+
+%shared_ptr(SmileSectionRNDCalculator)
+class SmileSectionRNDCalculator : public RiskNeutralDensityCalculator {
+  public:
+    SmileSectionRNDCalculator(
+        ext::shared_ptr<SmileSection> smile,
+        Size nStrikes = 200,
+        Real nStd = 5.0);
+
+    Real pdf(Real x) const;
+    Real cdf(Real x) const;
+    Real invcdf(Real p) const;
 };
 
 

@@ -25,13 +25,13 @@
 
 [build-system]
 # swig 4.5 drops the PyInt_* macros used in SWIG/
-requires = ["scikit-build-core>=0.11", "swig>=4.4,<4.6", "xad>=2.1,<2.3"]
+requires = ["scikit-build-core>=0.11", "swig>=4.4,<4.6", "xad>=2.2,<2.3"]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "QuantLibAAD"
 # keep in sync with CMakeLists.txt
-version = "1.41.0"
+version = "1.44.0"
 description = "Fast risks calculations in QuantLib"
 readme = "Python/README.md"
 requires-python = ">=3.10"
@@ -71,7 +71,7 @@ classifiers = [
     "Topic :: Software Development",
 ]
 # the binary module links xad's libxad and shares its Real type (same pybind11)
-dependencies = ["xad>=2.1,<2.3"]
+dependencies = ["xad>=2.2,<2.3"]
 
 [project.urls]
 Homepage = "https://auto-differentiation.github.io"
@@ -112,14 +112,9 @@ build-verbosity = 1
 # QuantLib (with QuantLibAAD) is built once per platform and reused by all
 # wheels through QLR_QUANTLIB_PREFIX, against the XAD of a xad package that
 # build-quantlib.cmake installs (XAD_REQUIREMENT)
-before-all = "cmake \"-DXAD_REQUIREMENT=xad @ git+https://github.com/auto-differentiation/xad-py.git@9ca179764907ba44038efd1beb3631d35a5e22ea\" -DPREFIX={project}/build/quantlib-prefix -P {project}/tools/build-quantlib.cmake"
+before-all = "cmake \"-DXAD_REQUIREMENT=xad>=2.2,<2.3\" -DPREFIX={project}/build/quantlib-prefix -P {project}/tools/build-quantlib.cmake"
 config-settings = { "cmake.define.QLR_QUANTLIB_PREFIX" = "{project}/build/quantlib-prefix" }
 test-groups = ["test"]
-# until xad 2.2 is on PyPI (then also xad>=2.2): xad-py from git (then drop before-build, build-frontend,
-# before-test and XAD_REQUIREMENT)
-before-build = "pip install \"scikit-build-core>=0.11\" \"swig>=4.4,<4.6\" cmake ninja \"xad @ git+https://github.com/auto-differentiation/xad-py.git@9ca179764907ba44038efd1beb3631d35a5e22ea\""
-build-frontend = { name = "build", args = ["--no-isolation"] }
-before-test = "pip install \"xad @ git+https://github.com/auto-differentiation/xad-py.git@9ca179764907ba44038efd1beb3631d35a5e22ea\""
 # importlib mode tests the installed package; Python/test would clash with the stdlib test package
 test-command = "pytest -p no:cacheprovider --import-mode=importlib {project}/Python/test"
 

@@ -24,10 +24,10 @@
 ##############################################################################
 
 cmake_minimum_required(VERSION 3.18...4.2)
-project(QuantLibAAD_Py LANGUAGES CXX VERSION 1.41.0)
+project(QuantLibAAD_Py LANGUAGES CXX VERSION 1.44.0)
 
 set(QLR_VERSION ${PROJECT_VERSION})
-set(QLR_HEX_VERSION "0x014100f0")
+set(QLR_HEX_VERSION "0x014400f0")
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -46,6 +46,7 @@ set(QLR_QUANTLIB_PREFIX "" CACHE PATH
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+include(QLRBuildDefaults)
 include(QLRXad)
 
 if(QLR_QUANTLIB_PREFIX AND NOT QLR_QUANTLIB_ONLY)

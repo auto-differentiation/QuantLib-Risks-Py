@@ -1,7 +1,7 @@
 # QuantLib-Risks is now QuantLibAAD
 
 This package has been renamed to [QuantLibAAD](https://pypi.org/project/QuantLibAAD).
-`QuantLib-Risks` 1.41 only installs `QuantLibAAD` and keeps `import QuantLib_Risks`
+`QuantLib-Risks` 1.44 only installs `QuantLibAAD` and keeps `import QuantLib_Risks`
 working, with a `DeprecationWarning`. Please switch to:
 
 ```bash

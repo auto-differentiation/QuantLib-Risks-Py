@@ -31,13 +31,13 @@ if(NOT XAD_DIR)
     OUTPUT_VARIABLE xad_cmake_dir OUTPUT_STRIP_TRAILING_WHITESPACE
     RESULT_VARIABLE xad_rc)
   if(NOT xad_rc EQUAL 0)
-    message(FATAL_ERROR "xad not importable by ${Python_EXECUTABLE}: pip install \"xad>=2.1,<2.3\"")
+    message(FATAL_ERROR "xad not importable by ${Python_EXECUTABLE}: pip install \"xad>=2.2,<2.3\"")
   endif()
   file(TO_CMAKE_PATH "${xad_cmake_dir}" xad_cmake_dir)
   set(XAD_DIR "${xad_cmake_dir}" CACHE PATH "XAD CMake package directory" FORCE)
 endif()
 
-find_package(XAD 2.1 CONFIG REQUIRED)  # 2.2 once released
+find_package(XAD 2.2 CONFIG REQUIRED)
 if(XAD_VERSION VERSION_GREATER_EQUAL 2.3 OR NOT XAD_SHARED_LIBS OR XAD_NO_THREADLOCAL)
   message(FATAL_ERROR "XAD ${XAD_VERSION} in ${XAD_DIR}: need xad with shared libxad and "
                       "thread-local tapes")

@@ -31,6 +31,7 @@
 %include cashflows.i
 %include interestrate.i
 %include indexes.i
+%shared_ptr(Bond)
 %include inflation.i
 %include shortratemodels.i
 
@@ -55,7 +56,6 @@ class BondPrice {
     bool isValid() const;
 };
 
-%shared_ptr(Bond)
 class Bond : public Instrument {
     #if defined(SWIGPYTHON)
     %rename(bondYield) yield;
@@ -274,7 +274,8 @@ class FloatingRateBond : public Bond {
         const Period& exCouponPeriod = Period(),
         const Calendar& exCouponCalendar = Calendar(),
         BusinessDayConvention exCouponConvention = Unadjusted,
-        bool exCouponEndOfMonth = false);
+        bool exCouponEndOfMonth = false,
+        BusinessDayConvention fixingConvention = Preceding);
 };
 
 

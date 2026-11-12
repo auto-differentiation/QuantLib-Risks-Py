@@ -1,7 +1,7 @@
 diff --git a/SWIG/options.i b/SWIG/options.i
 --- a/SWIG/options.i
 +++ b/SWIG/options.i
-@@ -423,7 +423,7 @@ class AnalyticHestonEngine : public PricingEngine {
+@@ -442,7 +442,7 @@ class AnalyticHestonEngine : public PricingEngine {
                           Real andersenPiterbargEpsilon = 1e-8);
  
      Size numberOfEvaluations() const;

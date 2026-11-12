@@ -1,8 +1,8 @@
 diff --git a/SWIG/date.i b/SWIG/date.i
 --- a/SWIG/date.i
 +++ b/SWIG/date.i
-@@ -936,4 +936,8 @@ struct ASX {
-                                 const Date& referenceDate = Date());
+@@ -957,4 +957,8 @@ struct ECB {
+     static std::string nextCode(const std::string& ecbCode);
  };
  
 +#ifdef QL_XAD

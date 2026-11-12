@@ -5,6 +5,7 @@
  Copyright (C) 2005 Johan Witters
  Copyright (C) 2018 Matthias Groncki
  Copyright (C) 2023 Skandinaviska Enskilda Banken AB (publ)
+ Copyright (C) 2026 Lawrenz Law
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -63,15 +64,15 @@ using QuantLib::JoinBusinessDays;
 enum JointCalendarRule { JoinHolidays, JoinBusinessDays };
 
 #if defined(SWIGPYTHON)
-%typemap(in) ext::optional<BusinessDayConvention> %{
+%typemap(in) std::optional<BusinessDayConvention> %{
     if ($input == Py_None)
-        $1 = ext::nullopt;
+        $1 = std::nullopt;
     else if (PyLong_Check($input))
         $1 = (BusinessDayConvention)PyLong_AsLong($input);
     else
         SWIG_exception(SWIG_TypeError, "int expected");
 %}
-%typecheck (QL_TYPECHECK_BUSINESSDAYCONVENTION) ext::optional<BusinessDayConvention> %{
+%typecheck (QL_TYPECHECK_BUSINESSDAYCONVENTION) std::optional<BusinessDayConvention> %{
     $1 = (PyLong_Check($input) || $input == Py_None) ? 1 : 0;
 %}
 #endif
@@ -111,6 +112,14 @@ class Calendar {
     std::string name();
     bool empty();
     %extend {
+        std::vector<Date> addedHolidays() {
+            return std::vector<Date>(self->addedHolidays().begin(),
+                                     self->addedHolidays().end());
+        }
+        std::vector<Date> removedHolidays() {
+            return std::vector<Date>(self->removedHolidays().begin(),
+                                     self->removedHolidays().end());
+        }
         std::string __str__() {
             return self->name()+" calendar";
         }
@@ -172,6 +181,12 @@ namespace QuantLib {
         Chile(Market m = SSE);
     };
 
+    class Croatia : public Calendar {
+      public:
+        enum Market { ZSE };
+        Croatia(Market m = ZSE);
+    };
+
     class China : public Calendar {
       public:
         enum Market { SSE, IB };
@@ -227,7 +242,7 @@ namespace QuantLib {
 
     class Israel : public Calendar {
       public:
-        enum Market { Settlement, TASE, SHIR };
+        enum Market { Settlement = 0, TASE = 1, SHIR = 2, Telbor = 3 };
         Israel(Market m = Settlement);
     };
 
@@ -239,10 +254,28 @@ namespace QuantLib {
 
     class Japan : public Calendar {};
 
+    class Malaysia : public Calendar {
+      public:
+        enum Market { KLSE };
+        Malaysia(Market m = KLSE);
+    };
+
+    class Malta : public Calendar {
+      public:
+        enum Market { MSE };
+        Malta(Market m = MSE);
+    };
+
     class Mexico : public Calendar {
       public:
         enum Market { BMV };
         Mexico(Market m = BMV);
+    };
+
+    class Montenegro : public Calendar {
+      public:
+        enum Market { MNSE };
+        Montenegro(Market m = MNSE);
     };
 
     class NewZealand : public Calendar {
@@ -251,7 +284,19 @@ namespace QuantLib {
         NewZealand(Market m = Wellington);
     };
 
+    class NorthMacedonia : public Calendar {
+      public:
+        enum Market { MSE };
+        NorthMacedonia(Market m = MSE);
+    };
+
     class Norway : public Calendar {};
+
+    class Philippines : public Calendar {
+      public:
+        enum Market { PSE };
+        Philippines(Market m = PSE);
+    };
 
     class Poland : public Calendar {
       public:
@@ -277,6 +322,12 @@ namespace QuantLib {
         SaudiArabia(Market m = Tadawul);
     };
 
+    class Serbia : public Calendar {
+      public:
+        enum Market { BSE };
+        Serbia(Market m = BSE);
+    };
+
     class Singapore : public Calendar {
       public:
         enum Market { SGX };
@@ -287,6 +338,12 @@ namespace QuantLib {
       public:
         enum Market { BSSE };
         Slovakia(Market m = BSSE);
+    };
+
+    class Slovenia : public Calendar {
+      public:
+        enum Market { LSE };
+        Slovenia(Market m = LSE);
     };
 
     class SouthAfrica : public Calendar {};
@@ -327,6 +384,12 @@ namespace QuantLib {
         enum Market { Settlement, NYSE, GovernmentBond,
                       NERC, LiborImpact, FederalReserve, SOFR };
         UnitedStates(Market m);
+    };
+
+    class Uzbekistan : public Calendar {
+      public:
+        enum Market { UZSE };
+        Uzbekistan(Market m = UZSE);
     };
 
     // others

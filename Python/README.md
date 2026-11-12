@@ -12,7 +12,7 @@ Useful links:
 pip install QuantLibAAD
 ```
 
-This package was called QuantLib-Risks up to version 1.33.3. `QuantLib-Risks` 1.41 is a
+This package was called QuantLib-Risks up to version 1.33.3. `QuantLib-Risks` 1.44 is a
 deprecated alias that installs `QuantLibAAD` and keeps `import QuantLib_Risks` working with a
 `DeprecationWarning`. Anyone pinned to `QuantLib-Risks==1.33.3` must also pin `xad<2`.
 
