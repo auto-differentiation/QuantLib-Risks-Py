@@ -39,8 +39,7 @@ First release as QuantLibAAD.
 - Builds against the shared libxad of the installed xad 2.2 package (`xad>=2.2,<2.3`), which is
   not bundled; tapes are shared with xad through libxad, thread-local per Python thread
 - QuantLib and the module are built with no FMA contraction (`-ffp-contract=off` with GCC and
-  Clang), so AD values match a plain-double build with the same setting, and with link-time
-  optimisation on Linux
+  Clang), so AD values match a plain-double build with the same setting
 - One-step build with scikit-build-core; wheels for Python 3.10-3.14 on Linux, macOS and Windows
 - `tools/sync-swig.sh` syncs `SWIG/` with a QuantLib-SWIG release, re-applying the XAD changes in `SWIG/patches/`
 
