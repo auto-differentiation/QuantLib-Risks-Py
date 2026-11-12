@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 [project]
 name = "QuantLib-Risks"
 # keep in sync with ../pyproject.toml
-version = "1.41.0"
+version = "1.44.0"
 description = "Deprecated: QuantLib-Risks is now QuantLibAAD"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -21,7 +21,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Programming Language :: Python :: 3",
 ]
-dependencies = ["QuantLibAAD==1.41.*"]
+dependencies = ["QuantLibAAD==1.44.*"]
 
 [project.urls]
 Homepage = "https://pypi.org/project/QuantLibAAD"

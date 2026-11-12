@@ -31,7 +31,7 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "QuantLibAAD"
 # keep in sync with CMakeLists.txt
-version = "1.41.0"
+version = "1.44.0"
 description = "Fast risks calculations in QuantLib"
 readme = "Python/README.md"
 requires-python = ">=3.10"
