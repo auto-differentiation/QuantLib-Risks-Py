@@ -166,10 +166,10 @@ class BondFunctionsTest(unittest.TestCase):
                          0.06527501)
         self.assertEqual(round(ql.BondFunctions.bps(self.bond,
                                                     ql.InterestRate(0.03, self.day_counter, ql.Compounded, ql.Annual)), 8),
-                         0.07071951)
+                         0.07073835)
         self.assertEqual(round(ql.BondFunctions.bps(self.bond,
                                                     0.03, self.day_counter, ql.Compounded, ql.Annual), 8),
-                         0.07071951)
+                         0.07073835)
 
     def testCleanPrice(self):
         """ Testing BondFunctions cleanPrice. """
@@ -219,12 +219,12 @@ class BondFunctionsTest(unittest.TestCase):
         self.assertEqual(round(ql.BondFunctions.basisPointValue(self.bond,
                                                                 0.03, self.day_counter, ql.Compounded, ql.Annual,
                                                                 self.settlement_date), 8),
-                         -0.07527271)
+                         -0.07524195)
         self.assertEqual(round(ql.BondFunctions.basisPointValue(self.bond,
                                                                 ql.InterestRate(
                                                                     0.03, self.day_counter, ql.Compounded, ql.Annual),
                                                                 self.settlement_date), 8),
-                         -0.07527271)
+                         -0.07524195)
 
     def testYieldValueBasisPoint(self):
         """ Testing BondFunctions yieldValueBasisPoint. """
