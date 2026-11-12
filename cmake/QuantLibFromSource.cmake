@@ -22,7 +22,9 @@ if(MSVC AND CMAKE_GENERATOR MATCHES "Visual Studio")
   add_compile_options(/MP)  # parallel compilation within the QuantLib project
 endif()
 
-add_subdirectory("${QLR_LIB_DIR}/QuantLib" "${CMAKE_BINARY_DIR}/QuantLib")
+set(QUANTLIB_SOURCE_DIR "${QLR_LIB_DIR}/QuantLib")
+include(QuantLibPatches)
+add_subdirectory("${QUANTLIB_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/QuantLib")
 # QuantLibAAD always adds its examples (which need a newer QuantLib) and test-suite
 foreach(dir Examples test-suite)
   if(EXISTS "${QLR_LIB_DIR}/QuantLibAAD/${dir}/CMakeLists.txt")
