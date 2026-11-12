@@ -1,10 +1,10 @@
 ##############################################################################
-#  Applies the temporary QuantLib fixes in patches/quantlib to the QuantLib
-#  source in QUANTLIB_SOURCE_DIR, before it is configured. A patch already
-#  applied is skipped; one that doesn't fit stops the build. Included by
-#  QuantLibFromSource, or run alone:
+#  Copies the QuantLib source in QUANTLIB_SOURCE_DIR to QUANTLIB_PATCHED_DIR
+#  and applies the temporary QuantLib fixes in patches/quantlib to the copy,
+#  which is then configured instead. A patch that doesn't fit stops the build.
+#  Included by QuantLibFromSource, or run alone:
 #
-#    cmake -DQUANTLIB_SOURCE_DIR=<dir> -P cmake/QuantLibPatches.cmake
+#    cmake -DQUANTLIB_SOURCE_DIR=<dir> -DQUANTLIB_PATCHED_DIR=<dir> -P cmake/QuantLibPatches.cmake
 #
 #  This file is part of QuantLibAAD, a Python wrapper for QuantLib enabled
 #  for risk computation using automatic differentiation. It uses XAD,
@@ -27,29 +27,40 @@
 #
 ##############################################################################
 
-if(NOT QUANTLIB_SOURCE_DIR)
-  message(FATAL_ERROR "QUANTLIB_SOURCE_DIR is not set")
-endif()
+foreach(var QUANTLIB_SOURCE_DIR QUANTLIB_PATCHED_DIR)
+  if(NOT ${var})
+    message(FATAL_ERROR "${var} is not set")
+  endif()
+endforeach()
 find_package(Git REQUIRED)
 file(GLOB qlr_patches "${CMAKE_CURRENT_LIST_DIR}/../patches/quantlib/*.patch")
 list(SORT qlr_patches)
 
-# git apply works relative to the enclosing repository: stop it from looking above the
-# QuantLib source (e.g. a source tree unpacked inside another checkout)
-get_filename_component(qlr_ceiling "${QUANTLIB_SOURCE_DIR}" DIRECTORY)
+# without .git, which may be a submodule's link to a repository that isn't there (an sdist)
+file(COPY "${QUANTLIB_SOURCE_DIR}/" DESTINATION "${QUANTLIB_PATCHED_DIR}" PATTERN ".git" EXCLUDE)
+# file(COPY) keeps a destination that is newer, as the files patched last time are
+foreach(patch IN LISTS qlr_patches)
+  file(STRINGS "${patch}" targets REGEX "^\\+\\+\\+ b/")
+  foreach(target IN LISTS targets)
+    string(REGEX REPLACE "^\\+\\+\\+ b/" "" rel "${target}")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E copy "${QUANTLIB_SOURCE_DIR}/${rel}"
+                                                     "${QUANTLIB_PATCHED_DIR}/${rel}"
+                    RESULT_VARIABLE rc)
+    if(NOT rc EQUAL 0)
+      message(FATAL_ERROR "cannot copy ${rel} from ${QUANTLIB_SOURCE_DIR} for patch ${patch}")
+    endif()
+  endforeach()
+endforeach()
+
+# git apply works relative to the enclosing repository: stop it from looking above the copy
+# (e.g. a build directory inside another checkout)
+get_filename_component(qlr_ceiling "${QUANTLIB_PATCHED_DIR}" DIRECTORY)
 set(qlr_git ${CMAKE_COMMAND} -E env "GIT_CEILING_DIRECTORIES=${qlr_ceiling}" "${GIT_EXECUTABLE}")
 
 foreach(patch IN LISTS qlr_patches)
   get_filename_component(name "${patch}" NAME)
-  execute_process(COMMAND ${qlr_git} apply --check --reverse "${patch}"
-                  WORKING_DIRECTORY "${QUANTLIB_SOURCE_DIR}"
-                  RESULT_VARIABLE already_applied OUTPUT_QUIET ERROR_QUIET)
-  if(already_applied EQUAL 0)
-    message(STATUS "QuantLib patch already applied: ${name}")
-    continue()
-  endif()
   execute_process(COMMAND ${qlr_git} apply "${patch}"
-                  WORKING_DIRECTORY "${QUANTLIB_SOURCE_DIR}"
+                  WORKING_DIRECTORY "${QUANTLIB_PATCHED_DIR}"
                   RESULT_VARIABLE rc ERROR_VARIABLE err)
   if(NOT rc EQUAL 0)
     message(FATAL_ERROR "QuantLib patch ${name} does not apply to ${QUANTLIB_SOURCE_DIR}:\n${err}")
