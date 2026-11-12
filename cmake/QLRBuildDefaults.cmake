@@ -35,8 +35,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
 endif()
 
 # link-time optimisation of the static QuantLib and the module on Linux, so both must be built with
-# the same compiler (GCC's or Clang's LTO objects hold only their IR); not on macOS and Windows
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang)$")
+# the same compiler (GCC's or Clang's LTO objects hold only their IR); not on macOS and Windows.
+# A CMAKE_INTERPROCEDURAL_OPTIMIZATION on the command line wins.
+if(NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION AND CMAKE_SYSTEM_NAME STREQUAL "Linux"
+   AND CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang)$")
   include(CheckIPOSupported)
   check_ipo_supported(RESULT qlr_ipo OUTPUT qlr_ipo_output LANGUAGES CXX)
   if(qlr_ipo)
