@@ -42,6 +42,7 @@ First release as QuantLibAAD.
   Clang), so AD values match a plain-double build with the same setting
 - One-step build with scikit-build-core; wheels for Python 3.10-3.14 on Linux, macOS and Windows
 - `tools/sync-swig.sh` syncs `SWIG/` with a QuantLib-SWIG release, re-applying the XAD changes in `SWIG/patches/`
+- Colab notebooks in `notebooks/`: option Greeks and curve risk in one adjoint sweep
 
 ## [1.33.3] - 2024-04-04
 
