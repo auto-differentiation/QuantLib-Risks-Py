@@ -271,6 +271,9 @@ print(pd.DataFrame(data, columns=["model", "in-the-money", "at-the-money", "out-
 # with the Hessian blocks $H_{pp}$ and $H_{pv}$ of $F$ taken from central
 # differences of its AAD gradient in the two parameters. The optimizer is never
 # differentiated, and the price itself doesn't depend on the quotes directly.
+#
+# The theorem assumes the calibration has reached the optimum, so we calibrate
+# with much tighter tolerances than the C++ sample does.
 
 import numpy as np
 from xad.adj_1st import Tape
@@ -297,10 +300,15 @@ def calibrationHelpers(vols, model):
     return result
 
 
+calibrationTolerance = 1e-12
+
+
 def calibratedParameters(vols):
     model = ql.HullWhite(termStructure)
-    model.calibrate(calibrationHelpers(vols, model), ql.LevenbergMarquardt(),
-                    ql.EndCriteria(400, 100, 1e-8, 1e-8, 1e-8))
+    tol = calibrationTolerance
+    # the first argument, the finite-difference step of the Jacobian, keeps its default
+    model.calibrate(calibrationHelpers(vols, model), ql.LevenbergMarquardt(1e-8, tol, tol),
+                    ql.EndCriteria(4000, 1000, tol, tol, tol))
     return [float(x) for x in model.params()]
 
 
