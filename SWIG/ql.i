@@ -2,6 +2,7 @@
 /*
  Copyright (C) 2000, 2001, 2002, 2003 RiskMap srl
  Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 StatPro Italia srl
+ Copyright (C) 2026 Kyrylo Protsenko
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -30,8 +31,8 @@
 %{
 #include <ql/quantlib.hpp>
 
-#if QL_HEX_VERSION < 0x01410000
-    #error at least QuantLib 1.41 required, please update
+#if QL_HEX_VERSION < 0x01440000
+    #error at least QuantLib 1.44 required, please update
 #endif
 
 #if defined (SWIGJAVA) || defined (SWIGCSHARP) 
@@ -149,6 +150,7 @@ QL_DEPRECATED_DISABLE_WARNING
 %include fra.i
 %include functions.i
 %include futures.i
+%include fxforward.i
 %include gaussian1dmodel.i
 %include grid.i
 %include indexes.i
@@ -174,6 +176,7 @@ QL_DEPRECATED_DISABLE_WARNING
 %include options.i
 %include payoffs.i
 %include piecewiseyieldcurve.i
+%include multicurve.i
 %include randomnumbers.i
 %include ratehelpers.i
 %include rounding.i
@@ -182,7 +185,6 @@ QL_DEPRECATED_DISABLE_WARNING
 %include shortratemodels.i
 %include slv.i
 %include spreaddiscountcurve.i
-%include spreadoption.i
 %include statistics.i
 %include stochasticprocess.i
 %include swap.i
@@ -193,6 +195,7 @@ QL_DEPRECATED_DISABLE_WARNING
 %include timeseries.i
 %include tracing.i
 %include types.i
+%include varianceswaps.i
 %include volatilities.i
 %include volatilitymodels.i
 %include zerocurve.i

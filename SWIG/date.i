@@ -171,24 +171,24 @@ enum Frequency {
 
 #if defined(SWIGPYTHON)
 %define QL_TYPECHECK_FREQUENCY       6210    %enddef
-%typemap(in) ext::optional<Frequency> %{
+%typemap(in) std::optional<Frequency> %{
     if ($input == Py_None)
-        $1 = ext::nullopt;
+        $1 = std::nullopt;
     else if (PyLong_Check($input))
         $1 = (Frequency)PyLong_AsLong($input);
     else
         SWIG_exception(SWIG_TypeError, "int expected");
 %}
-%typecheck (QL_TYPECHECK_FREQUENCY) ext::optional<Frequency> %{
+%typecheck (QL_TYPECHECK_FREQUENCY) std::optional<Frequency> %{
     $1 = (PyLong_Check($input) || $input == Py_None) ? 1 : 0;
 %}
 #else
 #if defined(SWIGCSHARP)
-%typemap(cscode) ext::optional<Frequency> %{
+%typemap(cscode) std::optional<Frequency> %{
     public static implicit operator OptionalFrequency(Frequency f) => new OptionalFrequency(f);
 %}
 #endif
-%template(OptionalFrequency) ext::optional<Frequency>;
+%template(OptionalFrequency) std::optional<Frequency>;
 #endif
 
 
@@ -375,9 +375,9 @@ class Period {
 };
 
 #if defined(SWIGPYTHON)
-%typemap(in) ext::optional<Period> %{
+%typemap(in) std::optional<Period> %{
     if($input == Py_None) {
-        $1 = ext::nullopt;
+        $1 = std::nullopt;
     } else {
         void *argp;
         int res = 0;
@@ -390,11 +390,11 @@ class Period {
             SWIG_exception_fail(SWIG_ValueError, "invalid null reference in method '$symname', argument $argnum of type '$type'");
         } else {
             Period p = *reinterpret_cast<Period*>(argp);
-            $1 = (ext::optional<Period>) p;
+            $1 = (std::optional<Period>) p;
         }
     }
 %}
-%typecheck (QL_TYPECHECK_PERIOD) ext::optional<Period> %{
+%typecheck (QL_TYPECHECK_PERIOD) std::optional<Period> %{
     if($input == Py_None) {
         $1 = 1;
     } else {
@@ -934,6 +934,27 @@ struct ASX {
     static std::string nextCode(const std::string& asxCode,
                                 bool mainCycle = true,
                                 const Date& referenceDate = Date());
+};
+
+%{
+using QuantLib::ECB;
+%}
+
+struct ECB {
+    static bool isECBdate(const Date& d);
+    static bool isECBcode(const std::string& in);
+    static std::string code(const Date& ecbDate);
+    static Date date(Month m, Year y);
+    static Date date(const std::string& ecbCode,
+                     const Date& referenceDate = Date());
+    static Date nextDate(const Date& d = Date());
+    static Date nextDate(const std::string& ecbCode,
+                         const Date& referenceDate = Date());
+    static std::vector<Date> nextDates(const Date& d = Date());
+    static std::vector<Date> nextDates(const std::string& ecbCode,
+                                       const Date& referenceDate = Date());
+    static std::string nextCode(const Date& d = Date());
+    static std::string nextCode(const std::string& ecbCode);
 };
 
 #ifdef QL_XAD

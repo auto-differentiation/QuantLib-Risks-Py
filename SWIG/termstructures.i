@@ -57,6 +57,15 @@ class TermStructure : public Observable {
 
 
 %{
+using QuantLib::Pillar;
+%}
+
+struct Pillar {
+    enum Choice { MaturityDate, LastRelevantDate, CustomDate };
+};
+
+
+%{
 using QuantLib::YieldTermStructure;
 %}
 
@@ -206,6 +215,8 @@ class FlatForward : public YieldTermStructure {
                 const DayCounter& dayCounter,
                 Compounding compounding = QuantLib::Continuous,
                 Frequency frequency = QuantLib::Annual);
+    Compounding compounding() const;
+    Frequency compoundingFrequency() const;
 };
 
 
@@ -224,7 +235,7 @@ class UltimateForwardTermStructure : public YieldTermStructure {
                                  const Handle<Quote>& ultimateForwardRate,
                                  const Period& firstSmoothingPoint,
                                  Real alpha,
-                                 ext::optional<Integer> roundingDigits = ext::nullopt,
+                                 std::optional<Integer> roundingDigits = std::nullopt,
                                  Compounding compounding = Compounded,
                                  Frequency frequency = Annual);
 };

@@ -1,7 +1,7 @@
 diff --git a/SWIG/fdm.i b/SWIG/fdm.i
 --- a/SWIG/fdm.i
 +++ b/SWIG/fdm.i
-@@ -98,9 +98,17 @@ class FdmBlackScholesMesher : public Fdm1dMesher {
+@@ -99,9 +99,17 @@ class FdmBlackScholesMesher : public Fdm1dMesher {
           Volatility vol);
  };
  
@@ -19,7 +19,7 @@ diff --git a/SWIG/fdm.i b/SWIG/fdm.i
  
  %shared_ptr(Concentrating1dMesher)
  class Concentrating1dMesher : public Fdm1dMesher {
-@@ -398,7 +406,13 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
+@@ -399,7 +407,13 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
  
      void setTime(Time t1, Time t2) {
          PyPtr::fromResult(
@@ -33,7 +33,7 @@ diff --git a/SWIG/fdm.i b/SWIG/fdm.i
              "failed to call setTime() on Python object");
      }
  
-@@ -426,8 +440,14 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
+@@ -429,8 +443,14 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
              SWIG_as_voidptr(&r), SWIGTYPE_p_Array, 0));
  
          auto pyResult = PyPtr::fromNew(
@@ -48,7 +48,7 @@ diff --git a/SWIG/fdm.i b/SWIG/fdm.i
  
          return extractArray(pyResult.get(), "solve_splitting");
      }
-@@ -437,8 +457,13 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
+@@ -440,8 +460,13 @@ class FdmLinearOpCompositeProxy : public FdmLinearOpComposite {
              SWIG_as_voidptr(&r), SWIGTYPE_p_Array, 0));
  
          auto pyResult = PyPtr::fromNew(
@@ -62,7 +62,7 @@ diff --git a/SWIG/fdm.i b/SWIG/fdm.i
  
          return extractArray(pyResult.get(), "preconditioner");
      }
-@@ -1097,7 +1122,12 @@ class FdmStepConditionProxy : public StepCondition<Array> {
+@@ -1106,7 +1131,12 @@ class FdmStepConditionProxy : public StepCondition<Array> {
              SWIG_as_voidptr(&a), SWIGTYPE_p_Array, 0));
  
          PyPtr::fromResult(
@@ -75,7 +75,7 @@ diff --git a/SWIG/fdm.i b/SWIG/fdm.i
              "failed to call applyTo() on Python object");
      }
      
-@@ -1187,10 +1217,19 @@ class FdmInnerValueCalculatorProxy : public FdmInnerValueCalculator {
+@@ -1196,10 +1226,19 @@ class FdmInnerValueCalculatorProxy : public FdmInnerValueCalculator {
              SWIG_as_voidptr(&iter), SWIGTYPE_p_FdmLinearOpIterator, 0));
  
          auto pyResult = PyPtr::fromResult(

@@ -89,6 +89,22 @@ class Swaption : public Option {
         Real forwardPrice() {
             return self->result<Real>("forwardPrice");
         }
+
+        Rate strike() {
+            return self->result<Real>("strike");
+        }
+
+        Rate atmForward() {
+            return self->result<Real>("atmForward");
+        }
+
+        Time swapLength() {
+            return self->result<Real>("swapLength");
+        }
+
+        Real stdDev() {
+            return self->result<Real>("stdDev");
+        }
     }
 };
 
@@ -97,7 +113,7 @@ using QuantLib::BasketGeneratingEngine;
 %}
 
 %shared_ptr(NonstandardSwaption)
-class NonstandardSwaption : public Instrument {
+class NonstandardSwaption : public Option {
   public:
     NonstandardSwaption(const ext::shared_ptr<NonstandardSwap>& swap,
                 const ext::shared_ptr<Exercise>& exercise,
@@ -136,7 +152,7 @@ class NonstandardSwaption : public Instrument {
 };
 
 %shared_ptr(FloatFloatSwaption)
-class FloatFloatSwaption : public Instrument {
+class FloatFloatSwaption : public Option {
 public:
     FloatFloatSwaption(const ext::shared_ptr<FloatFloatSwap>& swap,
                 const ext::shared_ptr<Exercise>& exercise,
@@ -223,6 +239,7 @@ class MakeSwaption {
     MakeSwaption& withOptionConvention(BusinessDayConvention bdc);
     MakeSwaption& withExerciseDate(const Date&);
     MakeSwaption& withUnderlyingType(Swap::Type type);
+    MakeSwaption& withExerciseCalendar(const Calendar&);
 
     MakeSwaption& withIndexedCoupons(bool flag = true);
     MakeSwaption& withAtParCoupons(bool flag = true);
@@ -254,6 +271,7 @@ _MAKESWAPTION_METHODS = {
     "optionConvention": "withOptionConvention",
     "exerciseDate": "withExerciseDate",
     "underlyingType": "withUnderlyingType",
+    "exerciseCalendar": "withExerciseCalendar",
     "pricingEngine": "withPricingEngine",
     "indexedCoupons": "withIndexedCoupons",
     "atParCoupons": "withAtParCoupons",

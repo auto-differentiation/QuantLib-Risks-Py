@@ -83,6 +83,10 @@ class Currency {
     }
 };
 
+namespace std {
+    %template(CurrencyVector) vector<Currency>;
+}
+
 
 namespace QuantLib {
 class AEDCurrency : public Currency {};
@@ -143,6 +147,7 @@ class LTLCurrency : public Currency {};
 class LUFCurrency : public Currency {};
 class LVLCurrency : public Currency {};
 class MADCurrency : public Currency {};
+class MKDCurrency : public Currency {};
 class MTLCurrency : public Currency {};
 class MURCurrency : public Currency {};
 class MXNCurrency : public Currency {};
@@ -186,6 +191,7 @@ class VNDCurrency : public Currency {};
 class XOFCurrency : public Currency {};
 class ZARCurrency : public Currency {};
 class ZMWCurrency : public Currency {};
+class UZSCurrency : public Currency {};
 
 // Crypto
 class BCHCurrency : public Currency {};

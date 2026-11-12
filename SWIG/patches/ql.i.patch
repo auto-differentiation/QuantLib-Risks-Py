@@ -1,7 +1,7 @@
 diff --git a/SWIG/ql.i b/SWIG/ql.i
 --- a/SWIG/ql.i
 +++ b/SWIG/ql.i
-@@ -112,6 +112,9 @@ GNU autoconf configure script.
+@@ -113,6 +113,9 @@ GNU autoconf configure script.
  QL_DEPRECATED_DISABLE_WARNING
  %}
  

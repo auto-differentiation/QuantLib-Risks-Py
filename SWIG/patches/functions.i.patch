@@ -49,8 +49,8 @@ diff --git a/SWIG/functions.i b/SWIG/functions.i
      }
    private:
      PyPtr function_;
-@@ -74,12 +96,20 @@ class PyCostFunction : public CostFunction {
-     Real value(const Array& x) const {
+@@ -74,12 +96,20 @@ class ArrayFunction {
+     Real operator()(const Array& x) const {
          auto tuple = PyPtr::fromResult(PyTuple_New(x.size()), "failed to convert arguments");
          for (Size i=0; i<x.size(); i++)
 +#ifdef QL_XAD
@@ -60,7 +60,7 @@ diff --git a/SWIG/functions.i b/SWIG/functions.i
 +#endif
  
          auto pyResult = PyPtr::fromResult(
-             PyObject_CallFunction(function_.get(), "O", tuple.get()),
+             PyObject_CallFunctionObjArgs(function_.get(), tuple.get(), NULL),
              "failed to call Python function");
 +#ifdef QL_XAD
 +        return make_Real(pyResult.get());
@@ -68,5 +68,5 @@ diff --git a/SWIG/functions.i b/SWIG/functions.i
          return PyFloat_AsDouble(pyResult.get());
 +#endif
      }
-     Array values(const Array& x) const {
-         QL_FAIL("Not implemented");
+   private:
+     PyPtr function_;

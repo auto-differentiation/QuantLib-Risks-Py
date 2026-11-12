@@ -4,6 +4,7 @@
  Copyright (C) 2005 Dominic Thuillier
  Copyright (C) 2007 Joseph Wang
  Copyright (C) 2018, 2019 Matthias Lungwitz
+ Copyright (C) 2020 Gorazd Brumen
  Copyright (C) 2024 Klaus Spanderen
 
  This file is part of QuantLib, a free-software/open-source library
@@ -236,6 +237,8 @@ using QuantLib::KirkEngine;
 using QuantLib::BjerksundStenslandSpreadEngine;
 using QuantLib::OperatorSplittingSpreadEngine;
 using QuantLib::Fd2dBlackScholesVanillaEngine;
+using QuantLib::PearsonSpreadEngine;
+using QuantLib::GaussianCopulaSpreadEngine;
 %}
 
 %shared_ptr(StulzEngine)
@@ -289,6 +292,28 @@ class Fd2dBlackScholesVanillaEngine : public PricingEngine {
         const FdmSchemeDesc& schemeDesc = FdmSchemeDesc::Hundsdorfer(),
         bool localVol = false,
         Real illegalLocalVolOverwrite = -Null<Real>());
+};
+
+%shared_ptr(PearsonSpreadEngine)
+class PearsonSpreadEngine : public PricingEngine {
+  public:
+    PearsonSpreadEngine(
+        ext::shared_ptr<GeneralizedBlackScholesProcess> process1,
+        ext::shared_ptr<GeneralizedBlackScholesProcess> process2,
+        Real correlation,
+        Real integrationTolerance = 1e-10,
+        Size maxIntegrationIterations = 10000,
+        Real nStd = 8.0);
+};
+
+%shared_ptr(GaussianCopulaSpreadEngine)
+class GaussianCopulaSpreadEngine : public PricingEngine {
+  public:
+    GaussianCopulaSpreadEngine(
+        ext::shared_ptr<GeneralizedBlackScholesProcess> process1,
+        ext::shared_ptr<GeneralizedBlackScholesProcess> process2,
+        Real correlation,
+        Size nPoints = 64);
 };
 
 %{
