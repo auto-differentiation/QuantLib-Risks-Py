@@ -54,8 +54,8 @@ def test_fx_forward_construction(common_vars):
                        vars["maturity_date"], True)  # paySourceCurrency=True means paying source (USD)
 
     # Check that attributes match the inputs
-    assert fwd.sourceNominal() == pytest.approx(usd_nominal, rel=vars["tolerance"])
-    assert fwd.targetNominal() == pytest.approx(sgd_nominal, rel=vars["tolerance"])
+    assert float(fwd.sourceNominal()) == pytest.approx(float(usd_nominal), rel=vars["tolerance"])
+    assert float(fwd.targetNominal()) == pytest.approx(float(sgd_nominal), rel=vars["tolerance"])
     assert fwd.sourceCurrency() == vars["usd"]
     assert fwd.targetCurrency() == vars["sgd"]
     assert fwd.maturityDate() == vars["maturity_date"]
@@ -75,12 +75,12 @@ def test_fx_forward_construction_with_rate(common_vars):
 
     # The target nominal should be nominal * forward_rate (i.e., 1,000,000 * 1.36)
     expected_target_nominal = nominal * forward_rate
-    assert fwd.sourceNominal() == pytest.approx(nominal, rel=vars["tolerance"])
-    assert fwd.targetNominal() == pytest.approx(expected_target_nominal, rel=1e-6)
+    assert float(fwd.sourceNominal()) == pytest.approx(float(nominal), rel=vars["tolerance"])
+    assert float(fwd.targetNominal()) == pytest.approx(float(expected_target_nominal), rel=1e-6)
     assert fwd.sourceCurrency() == vars["usd"]
     assert fwd.targetCurrency() == vars["sgd"]
     # fwd.forwardRate() should equal the input forward_rate
-    assert fwd.forwardRate() == pytest.approx(forward_rate, rel=1e-10)
+    assert float(fwd.forwardRate()) == pytest.approx(float(forward_rate), rel=1e-10)
 
 def test_contracted_forward_rate(common_vars):
     """Testing that the FX forward reports the contracted forward rate correctly."""
@@ -92,13 +92,13 @@ def test_contracted_forward_rate(common_vars):
     # FX forward constructed with explicit nominals
     fwd1 = ql.FxForward(usd_nominal, vars["usd"], sgd_nominal, vars["sgd"], 
                         vars["maturity_date"], True)
-    assert fwd1.forwardRate() == pytest.approx(expected_rate, rel=1e-10)
+    assert float(fwd1.forwardRate()) == pytest.approx(float(expected_rate), rel=1e-10)
 
     # FX forward constructed using a forward rate
     input_rate = 1.36
     fwd2 = ql.FxForward(usd_nominal, vars["usd"], vars["sgd"], input_rate, 
                         vars["maturity_date"], True)
-    assert fwd2.forwardRate() == pytest.approx(input_rate, rel=1e-10)
+    assert float(fwd2.forwardRate()) == pytest.approx(float(input_rate), rel=1e-10)
 
     # Now attach a pricing engine and compare contracted vs fair forward rate
     engine = ql.DiscountingFxForwardEngine(vars["usd_curve_handle"], vars["sgd_curve_handle"], vars["spot_handle"])
@@ -106,7 +106,7 @@ def test_contracted_forward_rate(common_vars):
     contracted_rate = fwd1.forwardRate()      # contractual forward rate (still 1.35 in fwd1)
     fair_rate = fwd1.fairForwardRate()        # fair forward rate given curves and spot
     # The contracted rate should generally differ from the fair forward rate (unless the deal was struck at fair value)
-    assert contracted_rate != pytest.approx(fair_rate, rel=1e-12)
+    assert float(contracted_rate) != pytest.approx(float(fair_rate), rel=1e-12)
 
 def test_fx_forward_expiry(common_vars):
     """Testing FX forward expiry flag for past maturity dates."""
@@ -156,7 +156,7 @@ def test_fair_forward_rate(common_vars):
 
     calculated_fair_rate = fwd.fairForwardRate()
     # The calculated fair rate should closely match the expected formula value
-    assert calculated_fair_rate == pytest.approx(expected_fair_rate, rel=1e-4)
+    assert float(calculated_fair_rate) == pytest.approx(float(expected_fair_rate), rel=1e-4)
 
 def test_at_the_money(common_vars):
     """Testing that an at-the-money FX forward (strike = fair forward rate) has zero NPV."""
@@ -206,7 +206,7 @@ def test_position_direction(common_vars):
     npv_long = fwd_long_usd.NPV()
     npv_short = fwd_short_usd.NPV()
     # The NPVs should be opposites (long vs short have equal and opposite value)
-    assert npv_long == pytest.approx(-npv_short, rel=1e-4)
+    assert float(npv_long) == pytest.approx(float(-npv_short), rel=1e-4)
 
 def test_ir_curve_sensitivity(common_vars):
     """Testing FX forward NPV sensitivity to interest rate curve shifts."""
