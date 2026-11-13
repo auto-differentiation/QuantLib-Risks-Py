@@ -366,7 +366,8 @@ def aad_sensitivities():
     Hpp = np.zeros((len(params), len(params)))
     Hpv = np.zeros((len(params), len(marketVols)))
     for k, value in enumerate(params):
-        h = 1e-6 * max(abs(value), 1e-3)
+        # smaller steps let the noise in the AAD gradient dominate the difference quotient
+        h = 1e-5 * max(abs(value), 1e-3)
         up, down = list(params), list(params)
         up[k] += h
         down[k] -= h
