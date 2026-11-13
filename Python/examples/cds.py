@@ -135,6 +135,9 @@ for cds, tenor in zip(all_cds, tenors):
 # risk-free rate and recovery rate (used by both the bootstrap and the
 # engine), the CDS's own running coupon and its nominal.
 #
+# The CDS here pays a running coupon of 1%, below the 2Y quoted spread, so it
+# is off par: its value and every one of its sensitivities are non-zero.
+#
 # The inputs are `ql.Real` values registered on the tape before the curves,
 # helpers and CDS are built from them. As a check, we compare with central
 # differences, re-bootstrapping the curve for each bump.
@@ -142,9 +145,10 @@ for cds, tenor in zip(all_cds, tenors):
 from xad.adj_1st import Tape
 
 tenor_labels = [str(tenor) for tenor in tenors]
+off_par_coupon = 0.01
 market_inputs = {"spread %s" % label: s for label, s in zip(tenor_labels, quoted_spreads)}
 market_inputs.update({"risk-free rate": flat_rate, "recovery rate": recovery_rate,
-                      "coupon": quoted_spreads[-1], "nominal": nominal})
+                      "coupon": off_par_coupon, "nominal": nominal})
 
 
 def cds_npv(x):
