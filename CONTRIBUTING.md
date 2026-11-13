@@ -88,9 +88,6 @@ Notes:
 -   Wheels for all supported Python versions are built with
     [cibuildwheel](https://cibuildwheel.pypa.io) (`pipx run cibuildwheel`, configured in
     `pyproject.toml`), the source distribution with `pipx run build --sdist`.
--   `shim/` is the pure-Python `QuantLib-Risks` distribution, a deprecated alias that requires
-    `QuantLibAAD` and re-exports it as `QuantLib_Risks`. Build it with `pipx run build shim`
-    and keep its version and `QuantLibAAD` requirement in sync with `pyproject.toml`.
 
 
 [pr]: https://github.com/auto-differentiation/QuantLibAAD-Py/compare/

@@ -94,7 +94,6 @@ install.components = ["python"]
 sdist.exclude = [
     ".github",
     "binder",
-    "shim",
     "build",
     "lib/QuantLib/Docs",
     "lib/QuantLib/Examples",

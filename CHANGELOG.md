@@ -9,9 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- The `QuantLib-Risks` alias package is no longer built: `QuantLib-Risks` 1.44.0 stays on PyPI as
+  its last release; install `QuantLibAAD` instead
+
 ### Added
 
 - Colab notebooks in `notebooks/`: option Greeks and curve risk in one adjoint sweep
+
 
 ## [1.44.0] - 2026-11-12
 

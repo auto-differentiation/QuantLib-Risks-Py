@@ -12,9 +12,10 @@ Useful links:
 pip install QuantLibAAD
 ```
 
-This package was called QuantLib-Risks up to version 1.33.3. `QuantLib-Risks` 1.44 is a
-deprecated alias that installs `QuantLibAAD` and keeps `import QuantLib_Risks` working with a
-`DeprecationWarning`. Anyone pinned to `QuantLib-Risks==1.33.3` must also pin `xad<2`.
+This package was called QuantLib-Risks up to version 1.33.3. `QuantLib-Risks` 1.44.0 is the last
+release under that name: a deprecated alias that installs `QuantLibAAD` 1.44 and keeps
+`import QuantLib_Risks` working with a `DeprecationWarning`; newer versions are QuantLibAAD only.
+Anyone pinned to `QuantLib-Risks==1.33.3` must also pin `xad<2`.
 
 Binary wheels are provided for CPython 3.10 to 3.14 on Linux (x86_64, aarch64), macOS (x86_64, arm64)
 and Windows (x86_64). The package requires the matching [xad](https://pypi.org/project/xad/) release,
