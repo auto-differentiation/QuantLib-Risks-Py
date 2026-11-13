@@ -7,6 +7,12 @@ the underlying QuantLib-SWIG changelog.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Colab notebooks in `notebooks/`: option Greeks and curve risk in one adjoint sweep
+
 ## [1.44.0] - 2026-11-12
 
 First release as QuantLibAAD.
@@ -42,7 +48,6 @@ First release as QuantLibAAD.
   Clang), so AD values match a plain-double build with the same setting
 - One-step build with scikit-build-core; wheels for Python 3.10-3.14 on Linux, macOS and Windows
 - `tools/sync-swig.sh` syncs `SWIG/` with a QuantLib-SWIG release, re-applying the XAD changes in `SWIG/patches/`
-- Colab notebooks in `notebooks/`: option Greeks and curve risk in one adjoint sweep
 
 ## [1.33.3] - 2024-04-04
 
@@ -60,6 +65,7 @@ First release as QuantLibAAD.
 Initial release, matching QuantLib Python bindings version 1.33
 
 
+[Unreleased]: https://github.com/auto-differentiation/QuantLibAAD-Py/compare/v1.44.0...HEAD
 [1.44.0]: https://github.com/auto-differentiation/QuantLibAAD-Py/compare/v1.33.3...v1.44.0
 
 [1.33.3]: https://github.com/auto-differentiation/QuantLib-Risks-Py/compare/v1.33.2...v1.33.3
