@@ -261,7 +261,8 @@ print(pd.DataFrame(data, columns=["model", "in-the-money", "at-the-money", "out-
 # Recording the calibration itself on the tape would differentiate the
 # optimizer's iterations: how its last steps happen to depend on the quotes,
 # with its own internal approximations, not how the optimum does. Those are not
-# the same thing, and the difference doesn't vanish with a tighter tolerance.
+# the same thing, and in practice the result stays off even with much tighter
+# end criteria.
 # Instead we use the implicit function theorem. At the calibrated parameters
 # $p$ the gradient of the calibration objective $F(p, v)$ is zero for any
 # volatilities $v$, so
@@ -379,7 +380,7 @@ def aad_sensitivities():
 
 
 npv, vegas = aad_sensitivities()
-print("\nIn-the-money Bermudan (Hull-White, finite differences) = {:.6f}".format(npv))
+print("\nIn-the-money Bermudan (Hull-White, finite-difference engine) = {:.6f}".format(npv))
 print("Vegas through the calibration, per unit change of volatility:")
 for name, vega in vegas.items():
     print("  {:<10} {:>12.6f}".format(name, vega))
