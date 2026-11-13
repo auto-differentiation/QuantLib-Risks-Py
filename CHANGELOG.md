@@ -7,6 +7,13 @@ the underlying QuantLib-SWIG changelog.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+
+- The `QuantLib-Risks` alias package is no longer built: `QuantLib-Risks` 1.44.0 stays on PyPI as
+  its last release; install `QuantLibAAD` instead
+
 ## [1.44.0] - 2026-11-12
 
 First release as QuantLibAAD.
@@ -59,6 +66,7 @@ First release as QuantLibAAD.
 Initial release, matching QuantLib Python bindings version 1.33
 
 
+[Unreleased]: https://github.com/auto-differentiation/QuantLibAAD-Py/compare/v1.44.0...HEAD
 [1.44.0]: https://github.com/auto-differentiation/QuantLibAAD-Py/compare/v1.33.3...v1.44.0
 
 [1.33.3]: https://github.com/auto-differentiation/QuantLib-Risks-Py/compare/v1.33.2...v1.33.3

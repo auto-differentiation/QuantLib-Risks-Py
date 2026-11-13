@@ -34,10 +34,11 @@ calculations as well as your own.
 
 ### Formerly QuantLib-Risks
 
-This package was called QuantLib-Risks up to version 1.33.3. From 1.44, `QuantLib-Risks`
-is a deprecated alias that installs `QuantLibAAD` and keeps `import QuantLib_Risks` working
-with a `DeprecationWarning`. Please switch to `pip install QuantLibAAD` and
-`import QuantLibAAD`. Anyone pinned to `QuantLib-Risks==1.33.3` must also pin `xad<2`.
+This package was called QuantLib-Risks up to version 1.33.3. `QuantLib-Risks` 1.44.0 is the
+last release under that name: a deprecated alias that installs `QuantLibAAD` 1.44 and keeps
+`import QuantLib_Risks` working with a `DeprecationWarning`. Newer versions are published as
+QuantLibAAD only, so please switch to `pip install QuantLibAAD` and `import QuantLibAAD`.
+Anyone pinned to `QuantLib-Risks==1.33.3` must also pin `xad<2`.
 
 ## Getting Help
 

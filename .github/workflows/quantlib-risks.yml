@@ -10,7 +10,7 @@
 # - publish to Test PyPI worked (with all build conditions above)
 # - and if it's a version tag (starting with v*)
 #
-# cibuildwheel config: [tool.cibuildwheel] in pyproject.toml; shim/ is built alongside
+# cibuildwheel config: [tool.cibuildwheel] in pyproject.toml
 
 name: QuantLibAAD wheels
 on:
@@ -110,26 +110,8 @@ jobs:
           path: dist/*.tar.gz
           if-no-files-found: error
 
-  build_shim:
-    name: QuantLib-Risks shim
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - name: Build sdist and wheel
-        run: pipx run build --outdir dist shim
-      - name: Check metadata
-        run: pipx run twine check --strict dist/*
-      - name: Upload shim
-        uses: actions/upload-artifact@v7
-        with:
-          name: dist-shim
-          path: dist/*
-          if-no-files-found: error
-
   test-publish:
-    needs: [build_wheels, build_sdist, build_shim]
+    needs: [build_wheels, build_sdist]
     if: >-
       github.repository == 'auto-differentiation/QuantLibAAD-Py' &&
       (github.event_name == 'workflow_dispatch' ||
