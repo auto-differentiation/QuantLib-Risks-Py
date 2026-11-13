@@ -1,0 +1,59 @@
+# Runs the examples and notebooks a pull request adds or changes against the latest QuantLibAAD
+# release from PyPI; the wheels themselves are only built for changes that go into them
+# (quantlib-risks.yml). An example that needs a change to the package itself fails here until
+# that change is released.
+
+name: Examples
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/examples.yml"
+      - "binder/requirements.txt"
+      - "Python/examples/**"
+      - "notebooks/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  examples:
+    name: Examples on the latest release
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install the latest QuantLibAAD release
+        run: pip install -r binder/requirements.txt
+      - name: Run the changed examples and notebooks
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          MPLBACKEND: Agg
+        run: |
+          # only those the pull request adds or changes; all of them on a manual run or when this
+          # workflow or the requirements change
+          if [ -n "$BASE" ] && git diff --quiet "$BASE" HEAD -- .github/workflows/examples.yml binder/requirements.txt; then
+            files=$(git diff --name-only --diff-filter=AMR "$BASE" HEAD -- 'Python/examples/*.py' 'notebooks/*.ipynb')
+          else
+            files=$(ls Python/examples/*.py notebooks/*.ipynb)
+          fi
+          python -c "import QuantLibAAD, xad; print('QuantLibAAD', QuantLibAAD.__version__, 'xad', xad.__version__)"
+          for f in $files; do
+            echo "::group::$f"
+            case "$f" in
+              *.py) (cd "$(dirname "$f")" && python "$(basename "$f")") ;;
+              *.ipynb) jupyter nbconvert --to notebook --execute --output-dir /tmp/executed "$f" ;;
+            esac
+            echo "::endgroup::"
+          done

@@ -1,5 +1,5 @@
 # builds only on the following conditions:
-# - pull requests into main
+# - pull requests into main that change what goes into the wheels (paths below)
 # - OR pushes of tags starting with v*
 # - OR manual dispatch on repo
 # publishes to test pypi if:
@@ -17,6 +17,22 @@ on:
   pull_request:
     branches:
       - main
+    # only changes that go into the wheels; examples and notebooks are tested in examples.yml
+    paths:
+      - ".github/workflows/quantlib-risks.yml"
+      - ".gitmodules"
+      - "CMakeLists.txt"
+      - "LICENSE.md"
+      - "pyproject.toml"
+      - "cmake/**"
+      - "lib/**"
+      - "patches/**"
+      - "tools/**"
+      - "SWIG/**"
+      - "Python/CMakeLists.txt"
+      - "Python/QuantLibAAD/**"
+      - "Python/README.md"
+      - "Python/test/**"
   push:
     tags:
       - v*
