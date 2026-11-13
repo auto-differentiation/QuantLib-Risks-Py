@@ -54,7 +54,8 @@ calendar = ql.TARGET()
 todaysDate = ql.Date(15, ql.May, 2007)
 ql.Settings.instance().evaluationDate = todaysDate
 
-risk_free_rate = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, 0.01, ql.Actual365Fixed()))
+flat_rate = 0.01
+risk_free_rate = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, flat_rate, ql.Actual365Fixed()))
 
 # ### CDS parameters
 
@@ -125,3 +126,93 @@ for cds, tenor in zip(all_cds, tenors):
     print("   default leg: {:.7g}".format(cds.defaultLegNPV()))
     print("   coupon leg: {:.7g}".format(cds.couponLegNPV()))
     print("")
+
+# ### Sensitivities with AAD
+#
+# QuantLibAAD records every operation on a tape, including the bootstrap of
+# the hazard curve, so one backward pass gives the sensitivities of the 2Y CDS
+# to all its inputs at once: the quoted spreads (through the bootstrap), the
+# risk-free rate and recovery rate (used by both the bootstrap and the
+# engine), the CDS's own running coupon and its nominal.
+#
+# The inputs are `ql.Real` values registered on the tape before the curves,
+# helpers and CDS are built from them. As a check, we compare with central
+# differences, re-bootstrapping the curve for each bump.
+
+from xad.adj_1st import Tape
+
+tenor_labels = [str(tenor) for tenor in tenors]
+market_inputs = {"spread %s" % label: s for label, s in zip(tenor_labels, quoted_spreads)}
+market_inputs.update({"risk-free rate": flat_rate, "recovery rate": recovery_rate,
+                      "coupon": quoted_spreads[-1], "nominal": nominal})
+
+
+def cds_npv(x):
+    day_counter = ql.Actual365Fixed()
+    risk_free = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, x["risk-free rate"], day_counter))
+    helpers = [
+        ql.SpreadCdsHelper(
+            ql.QuoteHandle(ql.SimpleQuote(x["spread %s" % label])),
+            tenor,
+            0,
+            calendar,
+            ql.Quarterly,
+            ql.Following,
+            ql.DateGeneration.TwentiethIMM,
+            day_counter,
+            x["recovery rate"],
+            risk_free,
+        )
+        for label, tenor in zip(tenor_labels, tenors)
+    ]
+    hazard = ql.DefaultProbabilityTermStructureHandle(
+        ql.PiecewiseFlatHazardRate(todaysDate, helpers, day_counter))
+    schedule = ql.Schedule(
+        todaysDate,
+        maturities[-1],
+        ql.Period(ql.Quarterly),
+        calendar,
+        ql.Following,
+        ql.Unadjusted,
+        ql.DateGeneration.TwentiethIMM,
+        False,
+    )
+    cds = ql.CreditDefaultSwap(ql.Protection.Seller, x["nominal"], x["coupon"], schedule,
+                               ql.Following, day_counter)
+    cds.setPricingEngine(ql.MidPointCdsEngine(hazard, x["recovery rate"], risk_free))
+    return cds.NPV()
+
+
+def aad_sensitivities():
+    ql.Settings.instance().evaluationDate = todaysDate
+    with Tape() as tape:
+        inputs = {name: ql.Real(value) for name, value in market_inputs.items()}
+        tape.registerInputs(inputs.values())
+        tape.newRecording()
+
+        npv = cds_npv(inputs)
+
+        tape.registerOutput(npv)
+        npv.derivative = 1.0
+        tape.computeAdjoints()
+        return float(npv), {name: x.derivative for name, x in inputs.items()}
+
+
+def bumped_sensitivities(relative_bump=1e-4):
+    sensitivities = {}
+    for name, value in market_inputs.items():
+        h = relative_bump * max(1.0, abs(value))
+        up, down = dict(market_inputs), dict(market_inputs)
+        up[name] += h
+        down[name] -= h
+        sensitivities[name] = (float(cds_npv(up)) - float(cds_npv(down))) / (2 * h)
+    return sensitivities
+
+
+npv, aad = aad_sensitivities()
+bumped = bumped_sensitivities()
+
+print("2Y CDS NPV = {:.6f}".format(npv))
+print("{:<16}{:>18}{:>18}".format("Input", "AAD", "Central diff."))
+for name in market_inputs:
+    print("{:<16}{:>18.6f}{:>18.6f}".format(name, aad[name], bumped[name]))

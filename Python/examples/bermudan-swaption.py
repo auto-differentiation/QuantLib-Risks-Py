@@ -249,3 +249,139 @@ data.append(("BK numerical", itmSwaption.NPV(), atmSwaption.NPV(), otmSwaption.N
 # -
 
 print(pd.DataFrame(data, columns=["model", "in-the-money", "at-the-money", "out-of-the-money"]))
+
+# ### Sensitivities with AAD
+#
+# We want the vegas of the in-the-money Bermudan swaption with respect to the
+# five swaption volatility quotes, with the Hull-White parameters moving as the
+# calibration would move them. As in the QuantLibAAD C++ sample, the model is
+# calibrated with Jamshidian's formula and Levenberg-Marquardt, and the
+# Bermudan is priced with a finite-difference Hull-White engine.
+#
+# Recording the calibration itself on the tape would differentiate the
+# optimizer's iterations: how its last steps happen to depend on the quotes,
+# with its own internal approximations, not how the optimum does. Those are not
+# the same thing, and in practice the result stays off even with much tighter
+# end criteria.
+# Instead we use the implicit function theorem. At the calibrated parameters
+# $p$ the gradient of the calibration objective $F(p, v)$ is zero for any
+# volatilities $v$, so
+#
+# $$\frac{dV}{dv} = -\frac{\partial V}{\partial p} \, H_{pp}^{-1} H_{pv},$$
+#
+# with the Hessian blocks $H_{pp}$ and $H_{pv}$ of $F$ taken from central
+# differences of its AAD gradient in the two parameters. The optimizer is never
+# differentiated, and the price itself doesn't depend on the quotes directly.
+#
+# The theorem assumes the calibration has reached the optimum, so we calibrate
+# with much tighter tolerances than the C++ sample does.
+
+import numpy as np
+from xad.adj_1st import Tape
+
+marketVols = [vol for _, _, vol in swaptionVols]
+vegaNames = ["vol %sx%s" % (maturity, length) for maturity, length, _ in swaptionVols]
+
+
+def calibrationHelpers(vols, model):
+    result = []
+    for (maturity, length, _), vol in zip(swaptionVols, vols):
+        helper = ql.SwaptionHelper(
+            maturity,
+            length,
+            ql.QuoteHandle(ql.SimpleQuote(vol)),
+            index,
+            index.tenor(),
+            index.dayCounter(),
+            index.dayCounter(),
+            termStructure,
+        )
+        helper.setPricingEngine(ql.JamshidianSwaptionEngine(model))
+        result.append(helper)
+    return result
+
+
+calibrationTolerance = 1e-12
+
+
+def calibratedParameters(vols):
+    model = ql.HullWhite(termStructure)
+    tol = calibrationTolerance
+    # the first argument, the finite-difference step of the Jacobian, keeps its default
+    model.calibrate(calibrationHelpers(vols, model), ql.LevenbergMarquardt(1e-8, tol, tol),
+                    ql.EndCriteria(4000, 1000, tol, tol, tol))
+    return [float(x) for x in model.params()]
+
+
+def bermudanNPV(model):
+    exerciseDates = [ql.as_coupon(c).accrualStartDate() for c in dummy.fixedLeg()]
+    swaption = ql.Swaption(itmSwap, ql.BermudanExercise(exerciseDates))
+    swaption.setPricingEngine(ql.FdHullWhiteSwaptionEngine(model))
+    return swaption.NPV()
+
+
+# The objective is the sum of squared calibration errors, which `calibrate`
+# minimizes; one recording gives its gradient in the parameters and the
+# volatilities.
+
+def objectiveGradient(params, vols):
+    with Tape() as tape:
+        p = [ql.Real(x) for x in params]
+        v = [ql.Real(x) for x in vols]
+        tape.registerInputs(p)
+        tape.registerInputs(v)
+        tape.newRecording()
+
+        model = ql.HullWhite(termStructure, p[0], p[1])
+        f = 0.0
+        for helper in calibrationHelpers(v, model):
+            error = helper.calibrationError()
+            f = f + error * error
+
+        tape.registerOutput(f)
+        f.derivative = 1.0
+        tape.computeAdjoints()
+        return np.array([x.derivative for x in p]), np.array([x.derivative for x in v])
+
+
+def npvAndParameterSensitivities(params):
+    with Tape() as tape:
+        p = [ql.Real(x) for x in params]
+        tape.registerInputs(p)
+        tape.newRecording()
+
+        npv = bermudanNPV(ql.HullWhite(termStructure, p[0], p[1]))
+
+        tape.registerOutput(npv)
+        npv.derivative = 1.0
+        tape.computeAdjoints()
+        return float(npv), np.array([x.derivative for x in p])
+
+
+def aad_sensitivities():
+    ql.Settings.instance().evaluationDate = todaysDate
+    params = calibratedParameters(marketVols)
+    npv, dVdp = npvAndParameterSensitivities(params)
+
+    Hpp = np.zeros((len(params), len(params)))
+    Hpv = np.zeros((len(params), len(marketVols)))
+    for k, value in enumerate(params):
+        # smaller steps let the noise in the AAD gradient dominate the difference quotient
+        h = 1e-5 * max(abs(value), 1e-3)
+        up, down = list(params), list(params)
+        up[k] += h
+        down[k] -= h
+        gpUp, gvUp = objectiveGradient(up, marketVols)
+        gpDown, gvDown = objectiveGradient(down, marketVols)
+        Hpp[:, k] = (gpUp - gpDown) / (2 * h)
+        Hpv[k, :] = (gvUp - gvDown) / (2 * h)
+
+    vegas = -dVdp @ np.linalg.solve(Hpp, Hpv)
+    return npv, dict(zip(vegaNames, (float(x) for x in vegas)))
+
+
+npv, vegas = aad_sensitivities()
+print("\nIn-the-money Bermudan (Hull-White, finite-difference engine) = {:.6f}".format(npv))
+print("Vegas through the calibration, per unit change of volatility:")
+for name, vega in vegas.items():
+    print("  {:<10} {:>12.6f}".format(name, vega))
