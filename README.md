@@ -43,7 +43,7 @@ with a `DeprecationWarning`. Please switch to `pip install QuantLibAAD` and
 
 Run these notebooks on Google Colab, with nothing to install:
 
-| Notebook | |
+| Notebook | What it shows |
 |---|---|
 | [Quickstart](notebooks/01_quickstart.ipynb): a European option's Greeks in one adjoint sweep, checked against QuantLib's analytic Greeks and bumping | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/auto-differentiation/QuantLibAAD-Py/blob/main/notebooks/01_quickstart.ipynb) |
 | [Curve risk](notebooks/02_curve_risk.ipynb): a swap book's sensitivities to every quote of a bootstrapped curve in one sweep | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/auto-differentiation/QuantLibAAD-Py/blob/main/notebooks/02_curve_risk.ipynb) |
