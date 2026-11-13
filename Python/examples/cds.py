@@ -54,7 +54,8 @@ calendar = ql.TARGET()
 todaysDate = ql.Date(15, ql.May, 2007)
 ql.Settings.instance().evaluationDate = todaysDate
 
-risk_free_rate = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, 0.01, ql.Actual365Fixed()))
+flat_rate = 0.01
+risk_free_rate = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, flat_rate, ql.Actual365Fixed()))
 
 # ### CDS parameters
 
@@ -140,32 +141,32 @@ for cds, tenor in zip(all_cds, tenors):
 
 from xad.adj_1st import Tape
 
-marketInputs = {"spread %s" % name: s
-                for name, s in zip(["3M", "6M", "1Y", "2Y"], quoted_spreads)}
-marketInputs.update({"risk-free rate": 0.01, "recovery rate": recovery_rate,
-                     "coupon": quoted_spreads[-1], "nominal": nominal})
+tenor_labels = [str(tenor) for tenor in tenors]
+market_inputs = {"spread %s" % label: s for label, s in zip(tenor_labels, quoted_spreads)}
+market_inputs.update({"risk-free rate": flat_rate, "recovery rate": recovery_rate,
+                      "coupon": quoted_spreads[-1], "nominal": nominal})
 
 
-def cdsNPV(x):
-    dayCounter = ql.Actual365Fixed()
-    riskFree = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, x["risk-free rate"], dayCounter))
+def cds_npv(x):
+    day_counter = ql.Actual365Fixed()
+    risk_free = ql.YieldTermStructureHandle(ql.FlatForward(todaysDate, x["risk-free rate"], day_counter))
     helpers = [
         ql.SpreadCdsHelper(
-            ql.QuoteHandle(ql.SimpleQuote(x["spread %s" % name])),
+            ql.QuoteHandle(ql.SimpleQuote(x["spread %s" % label])),
             tenor,
             0,
             calendar,
             ql.Quarterly,
             ql.Following,
             ql.DateGeneration.TwentiethIMM,
-            dayCounter,
+            day_counter,
             x["recovery rate"],
-            riskFree,
+            risk_free,
         )
-        for name, tenor in zip(["3M", "6M", "1Y", "2Y"], tenors)
+        for label, tenor in zip(tenor_labels, tenors)
     ]
     hazard = ql.DefaultProbabilityTermStructureHandle(
-        ql.PiecewiseFlatHazardRate(todaysDate, helpers, dayCounter))
+        ql.PiecewiseFlatHazardRate(todaysDate, helpers, day_counter))
     schedule = ql.Schedule(
         todaysDate,
         maturities[-1],
@@ -177,19 +178,19 @@ def cdsNPV(x):
         False,
     )
     cds = ql.CreditDefaultSwap(ql.Protection.Seller, x["nominal"], x["coupon"], schedule,
-                               ql.Following, dayCounter)
-    cds.setPricingEngine(ql.MidPointCdsEngine(hazard, x["recovery rate"], riskFree))
+                               ql.Following, day_counter)
+    cds.setPricingEngine(ql.MidPointCdsEngine(hazard, x["recovery rate"], risk_free))
     return cds.NPV()
 
 
 def aad_sensitivities():
     ql.Settings.instance().evaluationDate = todaysDate
     with Tape() as tape:
-        inputs = {name: ql.Real(value) for name, value in marketInputs.items()}
+        inputs = {name: ql.Real(value) for name, value in market_inputs.items()}
         tape.registerInputs(inputs.values())
         tape.newRecording()
 
-        npv = cdsNPV(inputs)
+        npv = cds_npv(inputs)
 
         tape.registerOutput(npv)
         npv.derivative = 1.0
@@ -197,14 +198,14 @@ def aad_sensitivities():
         return float(npv), {name: x.derivative for name, x in inputs.items()}
 
 
-def bumped_sensitivities(relativeBump=1e-4):
+def bumped_sensitivities(relative_bump=1e-4):
     sensitivities = {}
-    for name, value in marketInputs.items():
-        h = relativeBump * max(1.0, abs(value))
-        up, down = dict(marketInputs), dict(marketInputs)
+    for name, value in market_inputs.items():
+        h = relative_bump * max(1.0, abs(value))
+        up, down = dict(market_inputs), dict(market_inputs)
         up[name] += h
         down[name] -= h
-        sensitivities[name] = (float(cdsNPV(up)) - float(cdsNPV(down))) / (2 * h)
+        sensitivities[name] = (float(cds_npv(up)) - float(cds_npv(down))) / (2 * h)
     return sensitivities
 
 
@@ -213,5 +214,5 @@ bumped = bumped_sensitivities()
 
 print("2Y CDS NPV = {:.6f}".format(npv))
 print("{:<16}{:>18}{:>18}".format("Input", "AAD", "Central diff."))
-for name in marketInputs:
+for name in market_inputs:
     print("{:<16}{:>18.6f}{:>18.6f}".format(name, aad[name], bumped[name]))
