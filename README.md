@@ -51,7 +51,7 @@ Run these notebooks on Google Colab, with nothing to install:
 
 ## Getting Help
 
-For documentation and other resources, see https://auto-differentiation.github.io/quantlib-aad/python/ .
+For documentation and other resources, see https://www.xcelerit.com/xad/docs/quantlib-aad/python/ .
 
 If you have found an issue, want to report a bug, or have a feature request, please raise a [GitHub issue](https://github.com/auto-differentiation/QuantLibAAD-Py/issues).
 
