@@ -74,9 +74,9 @@ classifiers = [
 dependencies = ["xad>=2.2,<2.3"]
 
 [project.urls]
-Homepage = "https://auto-differentiation.github.io"
+Homepage = "https://www.xcelerit.com/xad/docs/"
 Repository = "https://github.com/auto-differentiation/QuantLibAAD-Py"
-Documentation = "https://auto-differentiation.github.io/quantlib-risks/python/"
+Documentation = "https://www.xcelerit.com/xad/docs/quantlib-aad/python/"
 Download = "https://pypi.org/project/QuantLibAAD/#files"
 Tracker = "https://github.com/auto-differentiation/QuantLibAAD-Py/issues"
 
